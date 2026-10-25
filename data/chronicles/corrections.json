@@ -26,5 +26,22 @@
       "quote": "高祖神堯大聖光孝皇帝中之上武德三年（庚辰，公元六二零年）",
       "accessed": "2026-10-25"
     }
+  },
+  {
+    "id": "houhanshu-8-guanghe-first-year",
+    "bookId": "houhanshu",
+    "sourceArticle": 9,
+    "volume": 8,
+    "paragraph": 111,
+    "original": "光和五年春正月，合浦、交阯乌浒蛮叛，招引九真、日南民攻没郡县。太尉孟〈有彧〉罢。",
+    "originalEraYear": 5,
+    "correctedEraYear": 1,
+    "correctedYear": 178,
+    "reason": "四库全书本对照文本记为光和元年，与后续二年及五年条目相合；仅修正归档纪年，原文五年保留。",
+    "evidence": {
+      "url": "https://zh.wikisource.org/w/index.php?oldid=589485&title=後漢書_(四庫全書本)/卷008",
+      "quote": "光和元年春正月合浦交阯烏滸蠻叛招引九眞日南民攻沒郡縣太尉孟𢒰罷",
+      "accessed": "2026-10-25"
+    }
   }
 ]

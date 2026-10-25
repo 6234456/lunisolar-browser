@@ -10,7 +10,7 @@ for(const patch of LunisolarEraData.aliasPatches){
 assert.equal(history.metadata.notes.loaded,true);
 assert.equal(history.metadata.notes.coverage,'partial');
 assert.equal(new Set(data.notes.map(n=>n.id)).size,data.notes.length);
-const raw={};for(const b of ['tongjian','shiji','hanshu'])raw[b]=JSON.parse(zlib.gunzipSync(fs.readFileSync(`vendor/chronicles/${b}.json.gz`)));
+const raw={};for(const b of ['tongjian','shiji','hanshu','houhanshu'])raw[b]=JSON.parse(zlib.gunzipSync(fs.readFileSync(`vendor/chronicles/${b}.json.gz`)));
 const tables=new Map();for(const r of research.months){const k=r[10]+':'+r[2];if(!tables.has(k))tables.set(k,[]);tables.get(k).push(r);}
 const stems='甲乙丙丁戊己庚辛壬癸',branches='子丑寅卯辰巳午未申酉戌亥';
 const gz=j=>stems[((j+49)%60+60)%60%10]+branches[((j+49)%60+60)%60%12];
@@ -56,7 +56,7 @@ const qinYear=data.notes.find(n=>n.bookId==='shiji'&&n.precision==='year'&&n.rec
 assert.equal(qinYear.dateCandidates[0].month,10);
 const uncertain=data.notes.find(n=>n.resolution==='unresolved');assert.ok(uncertain);
 assert.ok(history.searchNotes({resolution:'unresolved',limit:200}).notes.every(n=>n.dateCandidates.length===0));
-assert.equal(history.searchNotes({bookId:'shiji'}).total,94);
+assert.equal(history.searchNotes({bookId:'shiji'}).total,119);
 assert.equal(history.searchNotes({precision:'month'}).total,data.stats.byPrecision.month);
 assert.equal(history.note('missing'),null);
 const page1=history.searchNotes({offset:0,limit:3}),page2=history.searchNotes({offset:3,limit:3});
@@ -115,20 +115,69 @@ assert.equal(history.note('hanshu:1:40:0:a1').sourceArticle,1);
 assert.equal(history.note('hanshu:1:40:0').sourceArticle,2);
 const baseline=JSON.parse(zlib.gunzipSync(fs.readFileSync('data/chronicles/notes-0.5-baseline.json.gz')));
 for(const [id] of baseline.notes)assert.ok(history.note(id),`Existing ID retained: ${id}`);
-assert.equal(history.searchNotes({corrected:true}).total,51);
-assert.equal(history.searchNotes({corrected:false}).total,data.notes.length-51);
-assert.equal(history.searchNotes({tag:'era-change'}).total,212);
+assert.equal(history.searchNotes({corrected:true,bookId:'tongjian'}).total,51);
+assert.equal(history.searchNotes({corrected:false}).total,data.notes.length-data.stats.correctedContextNotes);
+assert.equal(history.searchNotes({tag:'era-change'}).total,232);
 assert.throws(()=>history.searchNotes({corrected:'true'}));
 assert.throws(()=>history.searchNotes({tag:'unknown'}));
 for(const n of data.notes.filter(n=>n.corrections?.length)){
- assert.ok([399,620].includes(n.recordedDate.year));
+ assert.ok([178,399,620].includes(n.recordedDate.year));
  assert.ok(n.corrections.every(c=>c.correctedYear===n.recordedDate.year));
 }
 assert.equal(history.note('tongjian:111:2:0').recordedDate.year,399);
 const taikang=history.eras({search:'太康'});
 assert.ok(taikang.some(e=>e.name==='大康'));
 assert.ok(taikang.some(e=>e.name==='太康'));
-const progress=require('./data/chronicles/progress-report.json');
+const progress=require('./data/chronicles/progress-0.6-report.json');
 assert.equal(progress.newNotes,3154);assert.equal(progress.removedNotes,0);
 assert.equal(progress.previouslyUnresolvedNowDated,36);assert.equal(progress.previouslyDatedNowUnresolved,8);
 console.log('0.6: source corrections, legacy IDs, leap-month fixes, inner clauses, chronology context and topic filters verified.');
+
+// 0.7: Eastern Han annals retain source article, reign context and uncertainty.
+assert.equal(history.searchNotes({bookId:'houhanshu'}).total,1722);
+assert.ok(history.searchNotes({bookId:'houhanshu',year:184}).notes.some(n=>n.text.includes('黄巾')));
+const huangjin=history.note('houhanshu:8:176:0');
+assert.equal(huangjin.recordedDate.year,184);assert.equal(huangjin.precision,'month');
+assert.ok(huangjin.isDisplayAnchor);assert.equal(huangjin.dateCandidates[0].day,1);
+const accession=history.note('houhanshu:1:27:0:a1');
+assert.equal(accession.sourceYearParagraph,20);assert.equal(accession.recordedDate.year,25);
+assert.equal(accession.recordedDate.ganzhi,'己未');
+const wen=history.note('shiji:10:36:0');
+assert.equal(wen.recordedDate.year,-156);assert.match(wen.text,/後七年六月己亥/);
+const newerBaseline=JSON.parse(zlib.gunzipSync(fs.readFileSync('data/chronicles/notes-0.6-baseline.json.gz')));
+for(const [id] of newerBaseline.notes)assert.ok(history.note(id),id);
+for(const id of ['tongjian:54:11:0','tongjian:120:78:0','tongjian:241:3:28']){
+ const n=history.note(id);assert.equal(n.issue,'INVALID_SEXAGENARY_DAY');
+ assert.equal(n.precision,'day');assert.equal(n.isDisplayAnchor,false);assert.deepEqual(n.dateCandidates,[]);
+ const oldJdn=newerBaseline.notes.find(([key])=>key===id)[1][0];
+ assert.ok(!history.notes(Lunisolar.fromJdn(oldJdn)).matches[0].notes.some(x=>x.id===id));
+}
+assert.ok(data.notes.filter(n=>n.resolution==='unresolved').every(n=>n.issue));
+assert.equal(Object.values(data.stats.byIssue).reduce((a,b)=>a+b,0),data.stats.unresolved);
+assert.equal(datedClauses('四月，甲子，曰："旧事。乙丑，事二。"').length,1);
+assert.equal(datedClauses("四月，甲子，曰：'旧事。乙丑，事二。'").length,1);
+assert.equal(datedClauses('四月，甲子，曰："旧事。乙丑，事二。"。丙寅，事三。').length,2);
+assert.equal(datedClauses('夏，立太子。六月甲戌，赦天下。').length,2);
+assert.equal(datedClauses('封侯。四月，事二。',true,true).length,2);
+assert.equal(datedClauses('封侯。四月，事二。').length,1);
+assert.equal(datedClauses('四月，甲子，事一。论曰：古事。乙丑，事二。').length,1);
+// Check every Eastern Han epoch against independently sourced DILA era-year 1,
+// located within a research calendar year (not a Gregorian year at its edge).
+const periods=require('./data/chronicles/annal-periods.json').houhanshu;
+for(const p of periods){
+ const row=LunisolarHistoricalData.months.find(r=>r[1]===p.epochEvidence.eraId&&r[2]===1);
+ assert.ok(row,p.label);
+ const year=research.months.find(r=>r[10]==='ytliu/main'&&r[6]<=row[6]&&r[7]>=row[6]);
+ assert.equal(year[2],p.firstYear,p.label);
+}
+const guanghe=history.note('houhanshu:8:111:0');
+assert.match(guanghe.text,/光和五年/);assert.equal(guanghe.eraYear,1);
+assert.equal(guanghe.recordedDate.year,178);assert.equal(guanghe.corrections[0].correctedEraYear,1);
+assert.ok(guanghe.corrections[0].evidence.url.includes('oldid=589485'));
+assert.equal(history.note('houhanshu:8:159:0').recordedDate.year,182);
+assert.ok(!history.note('houhanshu:8:159:0').corrections);
+const delta=require('./data/chronicles/progress-report.json');
+assert.equal(delta.baselineVersion,'0.6.0');assert.equal(delta.newNotes,1783);
+assert.equal(delta.removedNotes,0);assert.equal(delta.previouslyDatedNowUnresolved,3);
+assert.equal(delta.changedExistingDateCandidates,3);
+console.log('0.7: four-book source index, DILA reign epochs, invalid-day quarantine, ASCII quotations and 0.6 ID compatibility verified.');

@@ -34,6 +34,7 @@ function monthRows(rows,date){
  return found;
 }
 function locate(date){
+ if(date.ganzhi&&!cycle.includes(date.ganzhi))return [];
  const candidates=[];
  for(const calendarId of date.calendarIds||calendarIds(date.year)){
   const rows=tables.get(calendarId+':'+date.year)||[];
@@ -48,6 +49,18 @@ function locate(date){
  }
  return candidates;
 }
+function unresolvedIssue(date){
+ if(date.ganzhi&&!cycle.includes(date.ganzhi))return 'INVALID_SEXAGENARY_DAY';
+ const rows=(date.calendarIds||calendarIds(date.year)).flatMap(id=>tables.get(id+':'+date.year)||[]);
+ if(!rows.length)return 'NO_CALENDAR_YEAR';
+ const months=monthRows(rows,date);
+ if(!months.length)return date.isLeap?'NO_MATCHING_LEAP_MONTH':'NO_MATCHING_MONTH';
+ if(date.dayMarker){
+  const withoutMarker={...date};delete withoutMarker.dayMarker;
+  if(locate(withoutMarker).length)return 'DAY_BOUNDARY_CONFLICT';
+ }
+ return 'DAY_NOT_IN_RECORDED_MONTH';
+}
 const notes=[],skipped=[],headers=[],books={};
 function emit(book,volume,paragraph,part,quote,date,extra={}){
  quote=quote.trim();if(!quote)return;
@@ -55,15 +68,16 @@ function emit(book,volume,paragraph,part,quote,date,extra={}){
  let id=`${book}:${volume}:${paragraph}:${part}`;
  // Hanshu volume 1 has two source articles with independent paragraph indices.
  // Reserve every published 0.5 ID for its original article; qualify new clashes.
+ if(book==='houhanshu'&&volume===1)id+=`:a${extra.sourceArticle}`;
  if(book==='hanshu'&&volume===1&&((legacyIds[id]&&legacyIds[id]!==extra.sourceArticle)||(!legacyIds[id]&&extra.sourceArticle===2)))id+=`:a${extra.sourceArticle}`;
  notes.push({id,bookId:book,book:books[book].title,volume,
   paragraph,part,text:quote,precision:date.precision,recordedDate:date,
   placement:date.precision==='day'?'recorded-day':date.precision==='month'?'month-start':'year-start',
   isDisplayAnchor:date.precision!=='day',tags:/改元|更元|改年[号號]/.test(quote)?['era-change']:[],
   resolution:days.size===0?'unresolved':days.size===1?'unique':'ambiguous',
-  ...(days.size===0?{issue:'NO_MATCHING_HISTORICAL_CALENDAR_DAY'}:{}),dateCandidates,
+  ...(days.size===0?{issue:unresolvedIssue(date)}:{}),dateCandidates,
   sourceUrl:`${manifest.repository}/blob/${manifest.revision}/${encodeURIComponent(manifest.files[book].path)}`,
-  readingUrl:'https://zh.wikisource.org/wiki/'+encodeURIComponent(`${book==='tongjian'?'資治通鑑':book==='shiji'?'史記':'漢書'}/卷${String(volume).padStart(3,'0')}`),
+  readingUrl:'https://zh.wikisource.org/wiki/'+encodeURIComponent(book==='houhanshu'?`後漢書/卷${volume}${volume===1?(extra.sourceArticle===1?'上':'下'):''}`:`${book==='tongjian'?'資治通鑑':book==='shiji'?'史記':'漢書'}/卷${String(volume).padStart(3,'0')}`),
   extraction:'explicit-date-prefix',review:'rule-checked-transcription',...extra});
 }
 function firstSentence(s){
@@ -91,14 +105,16 @@ function prefix(s,state){
  const mm=rest.match(monthRE);
  if(mm){monthExplicit=true;state.month={monthName:mm[2],isLeap:!!mm[1]};rest=rest.slice(mm[0].length);}
  else {const leap=rest.match(/^[閏闰]月[，,]?/);if(leap){monthExplicit=true;state.month={monthName:null,isLeap:true};rest=rest.slice(leap[0].length);}}
- const dm=rest.match(dayRE),marker=rest.match(/^(朔|晦)[，,]/);
+ const dm=rest.match(dayRE);
+ const badDay=!dm&&rest.match(/^([甲乙丙丁戊己庚辛壬癸][甲乙丙丁戊己庚辛壬癸子丑寅卯辰巳午未申酉戌亥])(朔|晦)?[，,]/);
+ const marker=rest.match(/^(朔|晦)[，,]/);
  const ordinal=rest.match(/^(初[一二三四五六七八九十])(?:日)?[，,]/)||rest.match(/^([一二三四五六七八九十廿卅]{1,3})日[，,]/);
- if(dm||marker||ordinal){
+ if(dm||marker||ordinal||badDay){
   if(!state.month)return {unresolved:'DAY_WITHOUT_MONTH'};
-  const ganzhi=dm?.[1];if(ganzhi&&!cycle.includes(ganzhi))return {unresolved:'INVALID_SEXAGENARY_DAY'};
+  const ganzhi=dm?.[1]||badDay?.[1];
   const day=ordinal?number(ordinal[1].replace(/^初/,'')):null;
   if(day!==null&&(day<1||day>30))return {unresolved:'INVALID_ORDINAL_DAY'};
-  return {year:state.year,...state.month,precision:'day',...(ganzhi?{ganzhi}:{}),...(day!==null?{day}:{}),...((dm?.[2]||marker?.[1])?{dayMarker:dm?.[2]||marker[1]}:{}),
+  return {year:state.year,...state.month,precision:'day',...(ganzhi?{ganzhi}:{}),...(day!==null?{day}:{}),...((dm?.[2]||badDay?.[2]||marker?.[1])?{dayMarker:dm?.[2]||badDay?.[2]||marker[1]}:{}),
    monthContext:monthExplicit?'explicit':'preceding-dated-entry'};
  }
  if(monthExplicit)return {year:state.year,...state.month,precision:'month'};
@@ -106,10 +122,10 @@ function prefix(s,state){
  if(season)return {unresolved:'SEASON_ONLY'};
  return null;
 }
-for(const key of ['tongjian','shiji','hanshu'])books[key]={title:manifest.files[key].title,author:manifest.files[key].originalAuthor,
+for(const key of Object.keys(manifest.files))books[key]={title:manifest.files[key].title,author:manifest.files[key].originalAuthor,
  sha256:manifest.files[key].sha256,repository:manifest.repository,revision:manifest.revision};
 const tongjian=read('tongjian');
-for(const c of corrections)if(tongjian.articles[c.volume-1].content[c.paragraph]!==c.original)throw Error('Correction source mismatch: '+c.id);
+for(const c of corrections.filter(c=>c.bookId==='tongjian'))if(tongjian.articles[c.volume-1].content[c.paragraph]!==c.original)throw Error('Correction source mismatch: '+c.id);
 const headerRE=new RegExp('公元(前?)('+numberPattern+')年?[）)]?$');
 let lastYear=-Infinity;
 for(const [v,article] of tongjian.articles.entries()){
@@ -152,25 +168,29 @@ for(const [v,article] of tongjian.articles.entries()){
 const annals=JSON.parse(fs.readFileSync(path.join(root,'data/chronicles/annal-periods.json')));
 for(const [book,periods] of Object.entries(annals)){
  const corpus=read(book);
+ for(const c of corrections.filter(c=>c.bookId===book))if(corpus.articles[c.sourceArticle-1].content[c.paragraph]!==c.original)throw Error('Correction source mismatch');
  for(const spec of periods){
-  const article=corpus.articles[spec.article-1],state={year:null,month:null};let yearParagraph=null,eraYear=null;
+  const article=corpus.articles[spec.article-1],state={year:null,month:null};let yearParagraph=null,eraYear=null,lastEraYear=0,yearCorrection=null;
   for(let p=spec.from;p<=spec.to;p++){
    const s=article.content[p];if(!s)throw Error('Missing annotated paragraph');
    const re=new RegExp('^'+spec.prefix+'('+numberPattern+')年[，,]?'),m=s.match(re);
    if(m){
-    eraYear=number(m[1]);state.year=spec.firstYear+eraYear-1;state.month=null;yearParagraph=p;
-    if(eraYear<1||eraYear>spec.maxYear)throw Error(`Annal period overflow: ${book} ${spec.article} ${p}`);
+    yearCorrection=corrections.find(c=>c.bookId===book&&c.sourceArticle===spec.article&&c.paragraph===p)||null;
+    eraYear=yearCorrection?.correctedEraYear??number(m[1]);state.year=spec.firstYear+eraYear-1;state.month=null;yearParagraph=p;
+    if(eraYear<1||eraYear>spec.maxYear||spec.strictChronology&&eraYear<lastEraYear)throw Error(`Annal period overflow: ${book} ${spec.article} ${p}`);
+    lastEraYear=eraYear;
+    if(yearCorrection&&state.year!==yearCorrection.correctedYear)throw Error('Corrected year and epoch disagree');
    }else if(/^(?:中|後|后)?[元一二三四五六七八九十]+年/.test(s)){state.year=null;state.month=null;}
    if(state.year===null)continue;
    const lead=m?m[0]:'',rest=s.slice(lead.length);
    const containsOtherYear=/[元一二三四五六七八九十]+年/.test(rest);
-   const pieces=datedClauses(rest,!containsOtherYear);
+   const pieces=datedClauses(rest,!containsOtherYear,!!m);
    for(const piece of pieces){
     const date=prefix(piece.text,state),offset=lead.length+piece.offset;
     const key=piece.offset?`0c${offset}`:0;
     const quote=firstSentence(piece.offset===0&&m?lead+piece.text:piece.text);
     const extra={sourceRegnalLabel:spec.label,eraYear,sourceArticle:spec.article,sourceArticleTitle:article.title,
-     sourceYearParagraph:yearParagraph,...(!m||piece.offset?{extraction:'dated-entry-in-regnal-year-context',sourceOffset:offset}:{})};
+     sourceYearParagraph:yearParagraph,...(yearCorrection?{corrections:[yearCorrection]}:{}),...(!m||piece.offset?{extraction:'dated-entry-in-regnal-year-context',sourceOffset:offset}:{})};
     if(date?.unresolved){skipped.push({bookId:book,volume:spec.volume,paragraph:p,part:key,reason:date.unresolved,text:quote});continue;}
     if(date)emit(book,spec.volume,p,key,quote,date,extra);
     else if(m&&piece.offset===0)emit(book,spec.volume,p,key,quote,{year:state.year,precision:'year'},extra);
@@ -184,15 +204,16 @@ for(const [book,periods] of Object.entries(annals)){
 }
 const stats={notes:notes.length,dated:notes.filter(n=>n.resolution!=='unresolved').length,
  unresolved:notes.filter(n=>n.resolution==='unresolved').length,
+ byIssue:Object.fromEntries([...new Set(notes.filter(n=>n.issue).map(n=>n.issue))].sort().map(issue=>[issue,notes.filter(n=>n.issue===issue).length])),
  byBook:Object.fromEntries(Object.keys(books).map(b=>[b,notes.filter(n=>n.bookId===b).length])),
  byPrecision:Object.fromEntries(['day','month','year'].map(p=>[p,notes.filter(n=>n.precision===p).length])),
  correctedHeadings:corrections.length,correctedContextNotes:notes.filter(n=>n.corrections?.length).length,
  eraChangeNotes:notes.filter(n=>n.tags.includes('era-change')).length,
- skipped:skipped.length,sourceVolumes:{tongjian:294,shiji:'selected annals',hanshu:'selected annals'}};
+ skipped:skipped.length,sourceVolumes:{tongjian:294,shiji:'selected annals',hanshu:'selected annals',houhanshu:'imperial annals, selected chronological ranges in 10 source articles'}};
 if(new Set(notes.map(n=>n.id)).size!==notes.length)throw Error('Duplicate note IDs');
-const data={source:{id:'chronicles-notes-0.6.0',title:'史记、汉书、资治通鉴古文纪事索引',...manifest,
+const data={source:{id:'chronicles-notes-0.7.0',title:'史记、汉书、后汉书、资治通鉴古文纪事索引',...manifest,
  limitations:['古文转录本存在讹误；规则校验不等于逐条史学校勘。','提取明示日期的段首及非引语分句，并按明确纪年上下文关联；未提取不等于没有事件。','月、年精度条目归档在历表月首、年首，该日期不是事件发生日。','日期换算使用有来源的研究历表，早期历法可能返回多个候选。']},books,notes,stats};
 fs.writeFileSync(path.join(root,'data/history-notes.js'),'/* Ancient source quotations; see vendor/chronicles/README.md. */\nglobalThis.LunisolarNotesData = '+JSON.stringify(data).replace(/<\//g,'<\\/')+';\n');
 fs.writeFileSync(path.join(root,'data/chronicles/extraction-report.json'),JSON.stringify({stats,corrections,skipped,headers},null,2)+'\n');
 console.log(JSON.stringify(stats));
-module.exports={number,locate,prefix,cycle};
+module.exports={number,locate,prefix,cycle,unresolvedIssue};

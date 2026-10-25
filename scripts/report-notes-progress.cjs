@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib');
 const root=path.join(__dirname,'..');require('../data/history-notes.js');
-const before=JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,'data/chronicles/notes-0.5-baseline.json.gz'))));
+const before=JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(root,'data/chronicles/notes-0.6-baseline.json.gz'))));
 const now=LunisolarNotesData,current=new Map(now.notes.map(n=>[n.id,n]));
 const oldIds=new Set(before.notes.map(n=>n[0])),changes=[];
 let resolved=0,newlyUnresolved=0,removed=0;

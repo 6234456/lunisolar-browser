@@ -119,7 +119,7 @@
       },
       searchNotes({search='',bookId,precision,resolution,year,corrected,tag,offset=0,limit=50}={}) {
         if(typeof search!=='string')throw new TypeError('search 必须是字符串');
-        if(bookId!==undefined&&!['tongjian','shiji','hanshu'].includes(bookId))throw new TypeError('未知史书 bookId');
+        if(bookId!==undefined&&!['tongjian','shiji','hanshu','houhanshu'].includes(bookId))throw new TypeError('未知史书 bookId');
         if(precision!==undefined&&!['day','month','year'].includes(precision))throw new TypeError('未知日期精度');
         if(resolution!==undefined&&!['unique','ambiguous','unresolved'].includes(resolution))throw new TypeError('未知日期解析状态');
         if(year!==undefined)integer(year,'year',-9999,9999);

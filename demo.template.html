@@ -23,12 +23,12 @@
 <small>历史输出保留来源纪年，可按年号或研究历表的 N_y 年标签反查。现代模式支持公元前 2000 年至公元 3000 年，使用天文纪年：公元前 2000 年 = -1999；该模式不表示当时实际颁历。</small>
 <section aria-labelledby="notesHeading"><h2 id="notesHeading">当日史料备注</h2>
 <p>只记月的条目放在该月初一，只记年的放在该历年首日。归档日期不是确切发生日期；没有收录不表示当天没有事件。</p>
-<button id="monthNotes">查看该公历月逐日备注</button> <button id="yearNoteExample">三家分晋（年度事件）</button> <button id="monthNoteExample">景帝修阳陵、渭桥（月度事件）</button> <button id="regnalExample">鲁隐公元年正月初一</button>
+<button id="monthNotes">查看该公历月逐日备注</button> <button id="yearNoteExample">三家分晋（年度事件）</button> <button id="monthNoteExample">景帝修阳陵、渭桥（月度事件）</button> <button id="houNoteExample">后汉书黄巾起事（月度事件）</button> <button id="regnalExample">鲁隐公元年正月初一</button>
 <div id="dailyNotes" aria-live="polite"></div></section>
 <details><summary>日期换算与来源 JSON</summary><pre id="result" role="status" aria-live="polite"></pre></details>
 <section aria-labelledby="searchHeading"><h2 id="searchHeading">检索史料</h2>
 <label>关键词 <input id="noteSearch" placeholder="如：日有食之、始皇"></label>
-<label>史书 <select id="noteBook"><option value="">全部</option><option value="shiji">史记</option><option value="hanshu">汉书</option><option value="tongjian">资治通鉴</option></select></label>
+<label>史书 <select id="noteBook"><option value="">全部</option><option value="shiji">史记</option><option value="hanshu">汉书</option><option value="houhanshu">后汉书</option><option value="tongjian">资治通鉴</option></select></label>
 <label>日期精度 <select id="notePrecision"><option value="">全部</option><option value="day">记日</option><option value="month">仅记月</option><option value="year">仅记年</option></select></label>
 <label>日期状态 <select id="noteResolution"><option value="">全部</option><option value="unique">一个候选日</option><option value="ambiguous">多个候选日</option><option value="unresolved">待核日期</option></select></label>
 <label>专题 <select id="noteTopic"><option value="">全部</option><option value="era-change">含改元记载</option><option value="corrected">使用校订年份</option></select></label>
@@ -54,7 +54,9 @@ function renderNote(n,parent){
  const card=document.createElement('article');card.className='note';card.dataset.noteId=n.id;
  const head=document.createElement('strong');head.textContent=`《${n.book}》卷 ${n.volume} · ${precisionText[n.precision]}`;card.append(head);
  const quote=document.createElement('p');quote.textContent=n.text;card.append(quote);
- const info=document.createElement('small');info.textContent=`来源段号 ${n.paragraph}；${n.resolution==='unresolved'?'日期待核，未归入某一天':n.resolution==='ambiguous'?'历法换算有多个候选日期':'按研究历表换算'}。规则提取，尚非逐条校勘。`;card.append(info);
+ const info=document.createElement('small');info.textContent=`${n.sourceArticleTitle?n.sourceArticleTitle+'；':''}来源段号 ${n.paragraph}；${n.resolution==='unresolved'?'日期待核，未归入某一天':n.resolution==='ambiguous'?'历法换算有多个候选日期':'按研究历表换算'}。规则提取，尚非逐条校勘。`;card.append(info);
+ if(n.sourceRegnalLabel){const reign=document.createElement('small');reign.textContent=`史料纪年：${n.sourceRegnalLabel}，第 ${n.eraYear} 年。`;card.append(reign);}
+ if(n.issue){const reason=document.createElement('small');const labels={INVALID_SEXAGENARY_DAY:'原文干支不合法，不能降为仅记月归档',NO_CALENDAR_YEAR:'所选历表没有该年资料',NO_MATCHING_LEAP_MONTH:'所选历表没有匹配的闰月',NO_MATCHING_MONTH:'所选历表没有匹配的月份',DAY_BOUNDARY_CONFLICT:'干支日期与原文朔／晦要求不合',DAY_NOT_IN_RECORDED_MONTH:'原文日号或干支不在所记月份内'};reason.textContent=`待核原因：${labels[n.issue]||n.issue}。`;card.append(reason);}
  for(const c of n.corrections||[]){const detail=document.createElement('small');detail.textContent=`编年校订：${c.original} → 归档年份 ${c.correctedYear}。`;const proof=document.createElement('a');proof.href=c.evidence.url;proof.target='_blank';proof.rel='noopener noreferrer';proof.textContent='校订依据（固定版本）';detail.append(proof);card.append(detail);}
  if(n.recordedDate.monthName===null&&n.recordedDate.isLeap){const info=document.createElement('small');info.textContent='原文仅写“闰月”，未指定月号；候选来自该历年的闰月，未沿用普通月。';card.append(info);}
  const link=document.createElement('a');link.href=n.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看固定版本原文';card.append(link);
@@ -113,6 +115,7 @@ $('leapExample').onclick=()=>example('modern','lunar',2023,2,1);
 $('gapExample').onclick=()=>{example('historical','civil',1582,10,10);$('calendar').value='historical';run();};
 $('regnalExample').onclick=()=>{$('eraSearch').value='鲁隐公';listEras();$('historyKind').value='era';$('eraYear').value=1;example('historical','lunar',-721,1,1,'astronomical');};
 $('yearNoteExample').onclick=()=>showDate(engines.historical.note('tongjian:1:3:0').dateCandidates[0].jdn);
+$('houNoteExample').onclick=()=>showDate(engines.historical.note('houhanshu:8:176:0').dateCandidates[0].jdn);
 $('monthNoteExample').onclick=()=>showDate(engines.historical.note('shiji:11:5:0').dateCandidates[0].jdn);
 $('monthNotes').onclick=()=>{
  if(!currentMatches.length){$('dailyNotes').textContent='请先查询一个有效日期。';return;}

@@ -1,26 +1,35 @@
 {
   "stats": {
-    "notes": 13429,
-    "dated": 12809,
-    "unresolved": 620,
+    "notes": 15212,
+    "dated": 14485,
+    "unresolved": 727,
+    "byIssue": {
+      "DAY_BOUNDARY_CONFLICT": 28,
+      "DAY_NOT_IN_RECORDED_MONTH": 682,
+      "INVALID_SEXAGENARY_DAY": 7,
+      "NO_MATCHING_LEAP_MONTH": 8,
+      "NO_MATCHING_MONTH": 2
+    },
     "byBook": {
-      "tongjian": 12653,
-      "shiji": 94,
-      "hanshu": 682
+      "tongjian": 12675,
+      "shiji": 119,
+      "hanshu": 696,
+      "houhanshu": 1722
     },
     "byPrecision": {
-      "day": 9891,
-      "month": 2979,
-      "year": 559
+      "day": 11066,
+      "month": 3499,
+      "year": 647
     },
-    "correctedHeadings": 2,
-    "correctedContextNotes": 51,
-    "eraChangeNotes": 212,
-    "skipped": 1980,
+    "correctedHeadings": 3,
+    "correctedContextNotes": 66,
+    "eraChangeNotes": 232,
+    "skipped": 2010,
     "sourceVolumes": {
       "tongjian": 294,
       "shiji": "selected annals",
-      "hanshu": "selected annals"
+      "hanshu": "selected annals",
+      "houhanshu": "imperial annals, selected chronological ranges in 10 source articles"
     }
   },
   "corrections": [
@@ -49,6 +58,23 @@
       "evidence": {
         "url": "https://zh.wikisource.org/w/index.php?oldid=1567784&title=資治通鑑/卷188",
         "quote": "高祖神堯大聖光孝皇帝中之上武德三年（庚辰，公元六二零年）",
+        "accessed": "2026-10-25"
+      }
+    },
+    {
+      "id": "houhanshu-8-guanghe-first-year",
+      "bookId": "houhanshu",
+      "sourceArticle": 9,
+      "volume": 8,
+      "paragraph": 111,
+      "original": "光和五年春正月，合浦、交阯乌浒蛮叛，招引九真、日南民攻没郡县。太尉孟〈有彧〉罢。",
+      "originalEraYear": 5,
+      "correctedEraYear": 1,
+      "correctedYear": 178,
+      "reason": "四库全书本对照文本记为光和元年，与后续二年及五年条目相合；仅修正归档纪年，原文五年保留。",
+      "evidence": {
+        "url": "https://zh.wikisource.org/w/index.php?oldid=589485&title=後漢書_(四庫全書本)/卷008",
+        "quote": "光和元年春正月合浦交阯烏滸蠻叛招引九眞日南民攻沒郡縣太尉孟𢒰罷",
         "accessed": "2026-10-25"
       }
     }
@@ -1045,6 +1071,14 @@
       "part": 0,
       "reason": "SEASON_ONLY",
       "text": "春，杜钦荐犍为王延世于王凤，使塞决河。"
+    },
+    {
+      "bookId": "tongjian",
+      "volume": 30,
+      "paragraph": 40,
+      "part": "0c55",
+      "reason": "DAY_WITHOUT_MONTH",
+      "text": "三十六日，河堤成。"
     },
     {
       "bookId": "tongjian",
@@ -2197,6 +2231,14 @@
       "part": 0,
       "reason": "SEASON_ONLY",
       "text": "秋，汉卫将军姜维寇雍州，依麹山筑二城，使牙门将句安、李歆等守之，聚羌胡质任，侵逼诸郡。"
+    },
+    {
+      "bookId": "tongjian",
+      "volume": 75,
+      "paragraph": 55,
+      "part": "0c316",
+      "reason": "DAY_WITHOUT_MONTH",
+      "text": "三日，维遣其将廖化自白水南向艾结营。"
     },
     {
       "bookId": "tongjian",
@@ -9947,7 +9989,7 @@
       "paragraph": 9,
       "part": 0,
       "reason": "SEASON_ONLY",
-      "text": "春，诏出岐山无忧王寺佛指骨迎置禁中，又送诸寺以示众，倾都瞻礼，施财巨万"
+      "text": "春，诏出岐山无忧王寺佛指骨迎置禁中，又送诸寺以示众，倾都瞻礼，施财巨万；"
     },
     {
       "bookId": "tongjian",
@@ -11868,6 +11910,14 @@
       "part": "0c71",
       "reason": "DAY_WITHOUT_MONTH",
       "text": "己亥，全武遣武勇都监使吴璋以舟载昌如杭州，至小江南，斩之，并其家三百馀人，宰相李邈、蒋瑰以下百馀人。"
+    },
+    {
+      "bookId": "tongjian",
+      "volume": 260,
+      "paragraph": 101,
+      "part": 0,
+      "reason": "DAY_WITHOUT_MONTH",
+      "text": "乙己，以中书侍郎、同平章事崔胤同平章事，充武安节弃使。"
     },
     {
       "bookId": "tongjian",
@@ -14702,6 +14752,14 @@
       "text": "後元年冬，更命中大夫令为卫尉。"
     },
     {
+      "bookId": "shiji",
+      "volume": 10,
+      "paragraph": 33,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "後六年冬，匈奴三万人入上郡，三万人入云中。"
+    },
+    {
       "bookId": "hanshu",
       "volume": 1,
       "paragraph": 26,
@@ -15892,6 +15950,214 @@
       "part": 0,
       "reason": "SEASON_ONLY",
       "text": "冬，大风吹长安城东门屋瓦且尽。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 58,
+      "part": 0,
+      "reason": "DAY_WITHOUT_MONTH",
+      "text": "甲午，封叔父良为广阳王，兄子章为太原王，章弟兴为鲁王，舂陵侯嫡子祉为城阳王。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 11,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "夏，蝗。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 29,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，卢芳所置朔方太守田飒、云中太守乔扈各举郡降。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 33,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，大水。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 50,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "夏，征西大将军冯异破公孙述将赵匡于天水，斩之。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 68,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "夏，甘露降南行唐。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 141,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，东夷韩国人率众诣乐浪内附。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 147,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，鲜卑寇辽东，辽东太守祭肜大破之。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 180,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，鲁王兴、齐王石始就国。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 1,
+      "paragraph": 208,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，郡国三蝗。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 2,
+      "paragraph": 47,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，郡国十四雨水。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 2,
+      "paragraph": 82,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，车骑校猎上林苑。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 3,
+      "paragraph": 37,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，牛大疫。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 3,
+      "paragraph": 45,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，始行月令迎气乐。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 5,
+      "paragraph": 76,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，护羌校尉侯霸、骑都尉马贤破先零羌。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 6,
+      "paragraph": 167,
+      "part": "0c39",
+      "reason": "DAY_WITHOUT_MONTH",
+      "text": "丁丑，以太尉赵峻为太傅；大司农李固为太尉，参录尚书事。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 35,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，济南贼起，攻东平陵。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 45,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，鲜卑寇并州。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 70,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，洛水溢。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 129,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "二年春，大疫，使常侍、中谒者巡行致医药。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 145,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，表是地震，涌水出。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 171,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "夏，大旱。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 172,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "秋，金城河水溢。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 8,
+      "paragraph": 174,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，东海、东莱、琅邪井中冰厚尺余。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 9,
+      "paragraph": 84,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "二年春，袁术自称天子。"
+    },
+    {
+      "bookId": "houhanshu",
+      "volume": 9,
+      "paragraph": 156,
+      "part": 0,
+      "reason": "SEASON_ONLY",
+      "text": "冬，有星孛于东北。"
     }
   ],
   "headers": [

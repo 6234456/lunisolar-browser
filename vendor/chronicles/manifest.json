@@ -23,6 +23,13 @@
       "title": "汉书",
       "originalAuthor": "班固等",
       "upstreamSha256": "012b0b128ab3133957d80a424ae51bc6f60f660c7bb1b6774764f667861c62f7"
+    },
+    "houhanshu": {
+      "path": "后汉书.json",
+      "title": "后汉书",
+      "originalAuthor": "范晔（本纪、列传）等",
+      "sha256": "f6bae49b98e60ed96b1abdeba5b5803607aec1b72f257b889d36c07b0e489be9",
+      "upstreamSha256": "f71a96bf0a4cce7cb96176172b9f84991af5f1750a7afda89433bea94a944105"
     }
   },
   "snapshotTransform": "Retain only name and articles; omit modern introductory description; UTF-8 compact JSON, deterministic gzip."

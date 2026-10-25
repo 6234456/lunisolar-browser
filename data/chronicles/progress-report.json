@@ -1,28 +1,7 @@
 {
-  "baselineVersion": "0.5.0",
-  "baselineCommit": "16e218f687a4b9b9d9d9df1e5b996be3ffa73dd0",
+  "baselineVersion": "0.6.0",
+  "baselineCommit": "c40c83d01c88098edfddeac13f1029a9a8ece7d0",
   "previousStats": {
-    "notes": 10275,
-    "dated": 9814,
-    "unresolved": 461,
-    "byBook": {
-      "tongjian": 10065,
-      "shiji": 50,
-      "hanshu": 160
-    },
-    "byPrecision": {
-      "day": 7372,
-      "month": 2354,
-      "year": 549
-    },
-    "skipped": 1914,
-    "sourceVolumes": {
-      "tongjian": 294,
-      "shiji": "selected annals",
-      "hanshu": "selected annals"
-    }
-  },
-  "currentStats": {
     "notes": 13429,
     "dated": 12809,
     "unresolved": 620,
@@ -46,806 +25,89 @@
       "hanshu": "selected annals"
     }
   },
-  "newNotes": 3154,
+  "currentStats": {
+    "notes": 15212,
+    "dated": 14485,
+    "unresolved": 727,
+    "byIssue": {
+      "DAY_BOUNDARY_CONFLICT": 28,
+      "DAY_NOT_IN_RECORDED_MONTH": 682,
+      "INVALID_SEXAGENARY_DAY": 7,
+      "NO_MATCHING_LEAP_MONTH": 8,
+      "NO_MATCHING_MONTH": 2
+    },
+    "byBook": {
+      "tongjian": 12675,
+      "shiji": 119,
+      "hanshu": 696,
+      "houhanshu": 1722
+    },
+    "byPrecision": {
+      "day": 11066,
+      "month": 3499,
+      "year": 647
+    },
+    "correctedHeadings": 3,
+    "correctedContextNotes": 66,
+    "eraChangeNotes": 232,
+    "skipped": 2010,
+    "sourceVolumes": {
+      "tongjian": 294,
+      "shiji": "selected annals",
+      "hanshu": "selected annals",
+      "houhanshu": "imperial annals, selected chronological ranges in 10 source articles"
+    }
+  },
+  "newNotes": 1783,
   "removedNotes": 0,
-  "previouslyUnresolvedNowDated": 36,
-  "previouslyDatedNowUnresolved": 8,
-  "changedExistingDateCandidates": 52,
+  "previouslyUnresolvedNowDated": 0,
+  "previouslyDatedNowUnresolved": 3,
+  "changedExistingDateCandidates": 3,
   "changes": [
     {
-      "id": "tongjian:61:41:0",
+      "id": "tongjian:54:11:0",
       "previousDays": [
-        1792408
-      ],
-      "currentDays": [
-        1792468
-      ],
-      "recordedDate": {
-        "year": 195,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "辛巳",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:76:48:0",
-      "previousDays": [
-        1814250
+        1778933
       ],
       "currentDays": [],
       "recordedDate": {
-        "year": 255,
-        "monthName": null,
-        "isLeap": true,
+        "year": 158,
+        "monthName": "五",
+        "isLeap": false,
         "precision": "day",
-        "ganzhi": "癸未",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:80:19:0",
-      "previousDays": [],
-      "currentDays": [
-        1821214
-      ],
-      "recordedDate": {
-        "year": 274,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁亥",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:93:50:0",
-      "previousDays": [
-        1839996
-      ],
-      "currentDays": [
-        1840056
-      ],
-      "recordedDate": {
-        "year": 325,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:106:31:0",
-      "previousDays": [],
-      "currentDays": [
-        1861857
-      ],
-      "recordedDate": {
-        "year": 385,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚戌",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:128:66:0",
-      "previousDays": [
-        1887680
-      ],
-      "currentDays": [
-        1887740
-      ],
-      "recordedDate": {
-        "year": 456,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "癸酉",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:129:81:0",
-      "previousDays": [],
-      "currentDays": [
-        1889749
-      ],
-      "recordedDate": {
-        "year": 461,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:136:56:0",
-      "previousDays": [],
-      "currentDays": [
-        1898638
-      ],
-      "recordedDate": {
-        "year": 486,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "辛亥",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:136:99:0",
-      "previousDays": [
-        1899618
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 488,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "辛未",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:146:105:0",
-      "previousDays": [],
-      "currentDays": [
-        1906574
-      ],
-      "recordedDate": {
-        "year": 507,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁卯",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:146:106:0",
-      "previousDays": [],
-      "currentDays": [
-        1906591
-      ],
-      "recordedDate": {
-        "year": 507,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "甲申",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:146:107:0",
-      "previousDays": [],
-      "currentDays": [
-        1906592
-      ],
-      "recordedDate": {
-        "year": 507,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "乙酉",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:158:63:0",
-      "previousDays": [],
-      "currentDays": [
-        1918476
-      ],
-      "recordedDate": {
-        "year": 540,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:172:35:0",
-      "previousDays": [
-        1931381
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 575,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "甲午",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:179:68:0",
-      "previousDays": [],
-      "currentDays": [
-        1941289
-      ],
-      "recordedDate": {
-        "year": 602,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:192:6:11",
-      "previousDays": [],
-      "currentDays": [
-        1950199
-      ],
-      "recordedDate": {
-        "year": 627,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬申",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:193:5:24",
-      "previousDays": [],
-      "currentDays": [
-        1951212
-      ],
-      "recordedDate": {
-        "year": 629,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "乙丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:194:3:15",
-      "previousDays": [
-        1952115
-      ],
-      "currentDays": [
-        1952175
-      ],
-      "recordedDate": {
-        "year": 632,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "戊辰",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:195:5:7",
-      "previousDays": [],
-      "currentDays": [
-        1954194
-      ],
-      "recordedDate": {
-        "year": 638,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁未",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:197:3:17",
-      "previousDays": [],
-      "currentDays": [
-        1956124
-      ],
-      "recordedDate": {
-        "year": 643,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁巳",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:197:3:24",
-      "previousDays": [],
-      "currentDays": [
-        1956143
-      ],
-      "recordedDate": {
-        "year": 643,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丙子",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:199:16:7",
-      "previousDays": [
-        1960044
-      ],
-      "currentDays": [
-        1960104
-      ],
-      "recordedDate": {
-        "year": 654,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:199:16:8",
-      "previousDays": [
-        1960059
-      ],
-      "currentDays": [
-        1960119
-      ],
-      "recordedDate": {
-        "year": 654,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬辰",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:200:7:2",
-      "previousDays": [],
-      "currentDays": [
-        1961097
-      ],
-      "recordedDate": {
-        "year": 657,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚戌",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:202:13:8",
-      "previousDays": [],
-      "currentDays": [
-        1968086
-      ],
-      "recordedDate": {
-        "year": 676,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己卯",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:202:13:9",
-      "previousDays": [],
-      "currentDays": [
-        1968097
-      ],
-      "recordedDate": {
-        "year": 676,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:202:13:10",
-      "previousDays": [
-        1968061
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 676,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "甲寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:202:13:11",
-      "previousDays": [
-        1968065
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 676,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "戊午",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:207:3:2",
-      "previousDays": [],
-      "currentDays": [
-        1976976
-      ],
-      "recordedDate": {
-        "year": 700,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:207:3:3",
-      "previousDays": [],
-      "currentDays": [
-        1976984
-      ],
-      "recordedDate": {
-        "year": 700,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁酉",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:207:3:5",
-      "previousDays": [
-        1976937
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 700,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚戌",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:207:3:6",
-      "previousDays": [
-        1976947
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 700,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚申",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:207:9:3",
-      "previousDays": [],
-      "currentDays": [
-        1977986
-      ],
-      "recordedDate": {
-        "year": 703,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己卯",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:211:3:10",
-      "previousDays": [],
-      "currentDays": [
-        1981934
-      ],
-      "recordedDate": {
-        "year": 714,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁卯",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:211:3:12",
-      "previousDays": [],
-      "currentDays": [
-        1981943
-      ],
-      "recordedDate": {
-        "year": 714,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丙子",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:211:7:35",
-      "previousDays": [],
-      "currentDays": [
-        1982988
-      ],
-      "recordedDate": {
-        "year": 716,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "辛丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:212:11:6",
-      "previousDays": [],
-      "currentDays": [
-        1984956
-      ],
-      "recordedDate": {
-        "year": 722,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:213:5:15",
-      "previousDays": [],
-      "currentDays": [
-        1986907
-      ],
-      "recordedDate": {
-        "year": 727,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "庚申",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:213:5:16",
-      "previousDays": [
-        1986868
-      ],
-      "currentDays": [],
-      "recordedDate": {
-        "year": 727,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "辛巳",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:222:8:7",
-      "previousDays": [],
-      "currentDays": [
-        1999810
-      ],
-      "recordedDate": {
-        "year": 763,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "癸亥",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:241:5:5",
-      "previousDays": [],
-      "currentDays": [
-        2020614
-      ],
-      "recordedDate": {
-        "year": 820,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丁未",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:241:5:7",
-      "previousDays": [],
-      "currentDays": [
-        2020620
-      ],
-      "recordedDate": {
-        "year": 820,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "癸丑",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:243:15:3",
-      "previousDays": [],
-      "currentDays": [
-        2023601
-      ],
-      "recordedDate": {
-        "year": 828,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "甲午",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:245:90:0",
-      "previousDays": [
-        2026542
-      ],
-      "currentDays": [
-        2026602
-      ],
-      "recordedDate": {
-        "year": 836,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "乙未",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:248:2:0",
-      "previousDays": [
-        2029352
-      ],
-      "currentDays": [
-        2029569
-      ],
-      "recordedDate": {
-        "year": 844,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬戌",
+        "ganzhi": "甲戊",
+        "dayMarker": "晦",
         "monthContext": "explicit"
       }
     },
     {
-      "id": "tongjian:260:80:0",
-      "previousDays": [],
-      "currentDays": [
-        2048374
+      "id": "tongjian:120:78:0",
+      "previousDays": [
+        1876767
       ],
+      "currentDays": [],
       "recordedDate": {
-        "year": 896,
-        "monthName": null,
-        "isLeap": true,
+        "year": 426,
+        "monthName": "三",
+        "isLeap": false,
         "precision": "day",
-        "ganzhi": "丁亥",
-        "monthContext": "preceding-dated-entry"
+        "ganzhi": "辛己",
+        "monthContext": "explicit"
       }
     },
     {
-      "id": "tongjian:265:124:0",
-      "previousDays": [],
-      "currentDays": [
-        2052376
+      "id": "tongjian:241:3:28",
+      "previousDays": [
+        2020493
       ],
+      "currentDays": [],
       "recordedDate": {
-        "year": 906,
-        "monthName": null,
-        "isLeap": true,
+        "year": 819,
+        "monthName": "十",
+        "isLeap": false,
         "precision": "day",
-        "ganzhi": "己巳",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:268:61:0",
-      "previousDays": [],
-      "currentDays": [
-        2054353
-      ],
-      "recordedDate": {
-        "year": 912,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "丙寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:278:99:0",
-      "previousDays": [],
-      "currentDays": [
-        2062261
-      ],
-      "recordedDate": {
-        "year": 934,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "甲寅",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:280:45:0",
-      "previousDays": [],
-      "currentDays": [
-        2063296
-      ],
-      "recordedDate": {
-        "year": 936,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己巳",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:280:47:0",
-      "previousDays": [],
-      "currentDays": [
-        2063299
-      ],
-      "recordedDate": {
-        "year": 936,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "壬申",
-        "monthContext": "preceding-dated-entry"
-      }
-    },
-    {
-      "id": "tongjian:280:53:0",
-      "previousDays": [],
-      "currentDays": [
-        2063306
-      ],
-      "recordedDate": {
-        "year": 936,
-        "monthName": null,
-        "isLeap": true,
-        "precision": "day",
-        "ganzhi": "己卯",
-        "monthContext": "preceding-dated-entry"
+        "ganzhi": "壬戊",
+        "monthContext": "explicit"
       }
     }
   ],

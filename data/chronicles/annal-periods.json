@@ -89,6 +89,16 @@
       "firstYear": -142,
       "maxYear": 3,
       "label": "汉景帝后元"
+    },
+    {
+      "article": 10,
+      "volume": 10,
+      "from": 32,
+      "to": 38,
+      "prefix": "後",
+      "firstYear": -162,
+      "maxYear": 7,
+      "label": "汉文帝后元"
     }
   ],
   "hanshu": [
@@ -531,6 +541,680 @@
       "firstYear": 1,
       "maxYear": 5,
       "label": "平帝纪·元始"
+    }
+  ],
+  "houhanshu": [
+    {
+      "article": 1,
+      "volume": 1,
+      "from": 20,
+      "to": 118,
+      "prefix": "(?:建武)?",
+      "firstYear": 25,
+      "maxYear": 5,
+      "label": "后汉书·建武",
+      "eraName": "建武",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 1
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 2,
+      "volume": 1,
+      "from": 0,
+      "to": 201,
+      "prefix": "(?:建武)?",
+      "firstYear": 25,
+      "maxYear": 31,
+      "label": "后汉书·建武",
+      "eraName": "建武",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 1
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 2,
+      "volume": 1,
+      "from": 202,
+      "to": 215,
+      "prefix": "(?:中元)?",
+      "firstYear": 56,
+      "maxYear": 2,
+      "label": "后汉书·中元",
+      "eraName": "中元",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 2
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 3,
+      "volume": 2,
+      "from": 1,
+      "to": 5,
+      "prefix": "(?:中元)?",
+      "firstYear": 56,
+      "maxYear": 2,
+      "label": "后汉书·中元",
+      "eraName": "中元",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 2
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 3,
+      "volume": 2,
+      "from": 6,
+      "to": 101,
+      "prefix": "(?:永平)?",
+      "firstYear": 58,
+      "maxYear": 18,
+      "label": "后汉书·永平",
+      "eraName": "永平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 3
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 4,
+      "volume": 3,
+      "from": 1,
+      "to": 7,
+      "prefix": "(?:永平)?",
+      "firstYear": 58,
+      "maxYear": 18,
+      "label": "后汉书·永平",
+      "eraName": "永平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 3
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 4,
+      "volume": 3,
+      "from": 8,
+      "to": 65,
+      "prefix": "(?:建初)?",
+      "firstYear": 76,
+      "maxYear": 8,
+      "label": "后汉书·建初",
+      "eraName": "建初",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 4
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 4,
+      "volume": 3,
+      "from": 66,
+      "to": 97,
+      "prefix": "(?:元和)?",
+      "firstYear": 84,
+      "maxYear": 3,
+      "label": "后汉书·元和",
+      "eraName": "元和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 5
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 4,
+      "volume": 3,
+      "from": 98,
+      "to": 108,
+      "prefix": "(?:章和)?",
+      "firstYear": 87,
+      "maxYear": 2,
+      "label": "后汉书·章和",
+      "eraName": "章和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 6
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 1,
+      "to": 9,
+      "prefix": "(?:章和)?",
+      "firstYear": 87,
+      "maxYear": 2,
+      "label": "后汉书·章和",
+      "eraName": "章和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 6
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 10,
+      "to": 152,
+      "prefix": "(?:永元)?",
+      "firstYear": 89,
+      "maxYear": 16,
+      "label": "后汉书·永元",
+      "eraName": "永元",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 7
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 153,
+      "to": 158,
+      "prefix": "(?:元兴)?",
+      "firstYear": 105,
+      "maxYear": 1,
+      "label": "后汉书·元兴",
+      "eraName": "元兴",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 8
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 163,
+      "to": 170,
+      "prefix": "(?:延平)?",
+      "firstYear": 106,
+      "maxYear": 1,
+      "label": "后汉书·延平",
+      "eraName": "延平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 9
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 1,
+      "to": 6,
+      "prefix": "(?:延平)?",
+      "firstYear": 106,
+      "maxYear": 1,
+      "label": "后汉书·延平",
+      "eraName": "延平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 9
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 7,
+      "to": 78,
+      "prefix": "(?:永初)?",
+      "firstYear": 107,
+      "maxYear": 7,
+      "label": "后汉书·永初",
+      "eraName": "永初",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 10
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 79,
+      "to": 146,
+      "prefix": "(?:元初)?",
+      "firstYear": 114,
+      "maxYear": 6,
+      "label": "后汉书·元初",
+      "eraName": "元初",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 11
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 147,
+      "to": 156,
+      "prefix": "(?:永宁)?",
+      "firstYear": 120,
+      "maxYear": 1,
+      "label": "后汉书·永宁",
+      "eraName": "永宁",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 12
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 157,
+      "to": 169,
+      "prefix": "(?:建光)?",
+      "firstYear": 121,
+      "maxYear": 1,
+      "label": "后汉书·建光",
+      "eraName": "建光",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 13
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 170,
+      "to": 213,
+      "prefix": "(?:延光)?",
+      "firstYear": 122,
+      "maxYear": 4,
+      "label": "后汉书·延光",
+      "eraName": "延光",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 14
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 5,
+      "to": 49,
+      "prefix": "(?:永建)?",
+      "firstYear": 126,
+      "maxYear": 6,
+      "label": "后汉书·永建",
+      "eraName": "永建",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 15
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 50,
+      "to": 86,
+      "prefix": "(?:阳嘉)?",
+      "firstYear": 132,
+      "maxYear": 4,
+      "label": "后汉书·阳嘉",
+      "eraName": "阳嘉",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 16
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 87,
+      "to": 141,
+      "prefix": "(?:永和)?",
+      "firstYear": 136,
+      "maxYear": 6,
+      "label": "后汉书·永和",
+      "eraName": "永和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 17
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 142,
+      "to": 157,
+      "prefix": "(?:汉安)?",
+      "firstYear": 142,
+      "maxYear": 2,
+      "label": "后汉书·汉安",
+      "eraName": "汉安",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 18
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 158,
+      "to": 164,
+      "prefix": "(?:建康)?",
+      "firstYear": 144,
+      "maxYear": 1,
+      "label": "后汉书·建康",
+      "eraName": "建康",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 19
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 167,
+      "to": 173,
+      "prefix": "(?:建康)?",
+      "firstYear": 144,
+      "maxYear": 1,
+      "label": "后汉书·建康",
+      "eraName": "建康",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 19
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 174,
+      "to": 192,
+      "prefix": "(?:永憙)?",
+      "firstYear": 145,
+      "maxYear": 1,
+      "label": "后汉书·永憙",
+      "eraName": "永憙",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 20
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 193,
+      "to": 200,
+      "prefix": "(?:本初)?",
+      "firstYear": 146,
+      "maxYear": 1,
+      "label": "后汉书·本初",
+      "eraName": "本初",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 21
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 1,
+      "to": 5,
+      "prefix": "(?:本初)?",
+      "firstYear": 146,
+      "maxYear": 1,
+      "label": "后汉书·本初",
+      "eraName": "本初",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 21
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 6,
+      "to": 37,
+      "prefix": "(?:建和)?",
+      "firstYear": 147,
+      "maxYear": 3,
+      "label": "后汉书·建和",
+      "eraName": "建和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 22
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 38,
+      "to": 44,
+      "prefix": "(?:和平)?",
+      "firstYear": 150,
+      "maxYear": 1,
+      "label": "后汉书·和平",
+      "eraName": "和平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 23
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 45,
+      "to": 62,
+      "prefix": "(?:元嘉)?",
+      "firstYear": 151,
+      "maxYear": 2,
+      "label": "后汉书·元嘉",
+      "eraName": "元嘉",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 24
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 63,
+      "to": 79,
+      "prefix": "(?:永兴)?",
+      "firstYear": 153,
+      "maxYear": 2,
+      "label": "后汉书·永兴",
+      "eraName": "永兴",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 25
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 80,
+      "to": 101,
+      "prefix": "(?:永寿)?",
+      "firstYear": 155,
+      "maxYear": 3,
+      "label": "后汉书·永寿",
+      "eraName": "永寿",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 26
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 102,
+      "to": 213,
+      "prefix": "(?:延熹)?",
+      "firstYear": 158,
+      "maxYear": 9,
+      "label": "后汉书·延熹",
+      "eraName": "延熹",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 27
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 214,
+      "to": 225,
+      "prefix": "(?:永康)?",
+      "firstYear": 167,
+      "maxYear": 1,
+      "label": "后汉书·永康",
+      "eraName": "永康",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 28
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 1,
+      "to": 45,
+      "prefix": "(?:建宁)?",
+      "firstYear": 168,
+      "maxYear": 4,
+      "label": "后汉书·建宁",
+      "eraName": "建宁",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 29
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 46,
+      "to": 110,
+      "prefix": "(?:熹平)?",
+      "firstYear": 172,
+      "maxYear": 6,
+      "label": "后汉书·熹平",
+      "eraName": "熹平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 30
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 111,
+      "to": 175,
+      "prefix": "(?:光和)?",
+      "firstYear": 178,
+      "maxYear": 6,
+      "label": "后汉书·光和",
+      "eraName": "光和",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 31
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 176,
+      "to": 250,
+      "prefix": "(?:中平)?",
+      "firstYear": 184,
+      "maxYear": 6,
+      "label": "后汉书·中平",
+      "eraName": "中平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 32
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 10,
+      "to": 52,
+      "prefix": "(?:初平)?",
+      "firstYear": 190,
+      "maxYear": 4,
+      "label": "后汉书·初平",
+      "eraName": "初平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 36
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 53,
+      "to": 76,
+      "prefix": "(?:兴平)?",
+      "firstYear": 194,
+      "maxYear": 2,
+      "label": "后汉书·兴平",
+      "eraName": "兴平",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 37
+      },
+      "strictChronology": true
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 77,
+      "to": 168,
+      "prefix": "(?:建安)?",
+      "firstYear": 196,
+      "maxYear": 25,
+      "label": "后汉书·建安",
+      "eraName": "建安",
+      "epochEvidence": {
+        "source": "DILA",
+        "eraId": 38
+      },
+      "strictChronology": true
     }
   ]
 }
