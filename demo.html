@@ -6,6 +6,7 @@
 <p>同一个日期可能有多种历法写法；省略闰月或西历类型时，查询可能得到多个实际日期。</p>
 <fieldset><legend>日期查询</legend>
 <label>方向 <select id="direction"><option value="lunar">农历 → 西历</option><option value="solar">西历 → 农历</option><option value="civil">仅西历日期解析</option></select></label>
+<label>纪年 <select id="era"><option value="astronomical">天文纪年</option><option value="bce">公元前</option><option value="ce">公元</option></select></label>
 <label>年 <input id="year" type="number" value="2023" required></label>
 <label>月 <input id="month" type="number" value="2" min="1" max="12" required></label>
 <label>日 <input id="day" type="number" value="1" min="1" max="31" required></label>
@@ -13,8 +14,8 @@
 <label>西历 <select id="calendar"><option value="gregorian">回推格里高利历</option><option value="julian">回推儒略历</option><option value="auto">两种历法</option><option value="historical">1582-10-15 改历的地区</option></select></label>
 <button id="run" type="button">查询</button>
 </fieldset>
-<p><button id="leapExample">2023 二月初一（含闰月）</button> <button id="gapExample">1582 改历缺日</button></p>
-<small>农历范围：完整农历年 1900—2100；引擎：浏览器 Intl 中国历，固定 UTC+08:00。结果不代表古代实际颁行历法。仅西历解析支持天文纪年 -9999—9999，公元前 1 年记为 0。</small>
+<p><button id="leapExample">2023 二月初一（含闰月）</button> <button id="gapExample">1582 改历缺日</button> <button id="bceExample">公元前 2000 年</button> <button id="futureExample">公元 3000 年</button></p>
+<small>支持公元前 2000 年至公元 3000 年的双向查询；农历年额外包含下界前一年，供春节前的日期往返。引擎：浏览器 Intl 中国历，固定 UTC+08:00。结果不代表古代实际颁行历法。仅西历解析支持天文纪年 -9999—9999，输出统一采用天文纪年：公元前 2000 年记为 -1999，公元前 1 年记为 0。</small>
 <pre id="result" role="status" aria-live="polite"></pre>
 <script>/* Browser classic script; no dependencies. All years use astronomical numbering. */
 (function (root) {
@@ -107,9 +108,11 @@
     return calendars.map(c => ({calendar:c, ...fromJdn(jdn,c)}));
   }
 
-  function create({minYear = 1900, maxYear = 2100} = {}) {
+  function create({minYear = -2000, maxYear = 3000} = {}) {
     // These are complete lunar relatedYear ranges, not partial Gregorian years.
-    integer(minYear, 'minYear', 1, 9998);
+    // Gregorian BCE 2000 = astronomical -1999. Its January dates may belong
+    // to lunar year -2000, so include that entire preceding year for round trips.
+    integer(minYear, 'minYear', -2000, 9998);
     integer(maxYear, 'maxYear', minYear, 9998);
     const formatter = new Intl.DateTimeFormat('en-u-ca-chinese-nu-latn', {
       calendar:'chinese', numberingSystem:'latn', timeZone:'Etc/GMT-8',
@@ -198,6 +201,10 @@ function run(){
  try {
   const d={year:Number($('year').value),month:Number($('month').value),day:Number($('day').value)};
   for(const id of ['year','month','day']) if(!$(id).value.trim()) throw new Error('请填写年月日');
+  if($('era').value!=='astronomical') {
+   if(!Number.isSafeInteger(d.year)||d.year<1) throw new Error('公元/公元前年份必须是正整数，没有公元 0 年');
+   if($('era').value==='bce') d.year=1-d.year;
+  }
   const options={calendar:$('calendar').value};
   if(options.calendar==='historical') options.firstGregorian={year:1582,month:10,day:15};
   let result;
@@ -213,7 +220,9 @@ function run(){
  } catch(e) { $('result').textContent='查询错误：'+e.message; }
 }
 $('run').onclick=run;
-$('leapExample').onclick=()=>{ $('direction').value='lunar';$('year').value=2023;$('month').value=2;$('day').value=1;$('leap').value='';$('calendar').value='gregorian';run(); };
-$('gapExample').onclick=()=>{ $('direction').value='civil';$('year').value=1582;$('month').value=10;$('day').value=10;$('calendar').value='historical';run(); };
+$('leapExample').onclick=()=>{ $('era').value='ce'; $('direction').value='lunar';$('year').value=2023;$('month').value=2;$('day').value=1;$('leap').value='';$('calendar').value='gregorian';run(); };
+$('gapExample').onclick=()=>{ $('era').value='ce'; $('direction').value='civil';$('year').value=1582;$('month').value=10;$('day').value=10;$('calendar').value='historical';run(); };
+$('bceExample').onclick=()=>{ $('era').value='bce';$('direction').value='solar';$('year').value=2000;$('month').value=1;$('day').value=1;$('calendar').value='gregorian';run(); };
+$('futureExample').onclick=()=>{ $('era').value='ce';$('direction').value='solar';$('year').value=3000;$('month').value=12;$('day').value=31;$('calendar').value='gregorian';run(); };
 run();
 </script></html>

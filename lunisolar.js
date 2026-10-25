@@ -89,9 +89,11 @@
     return calendars.map(c => ({calendar:c, ...fromJdn(jdn,c)}));
   }
 
-  function create({minYear = 1900, maxYear = 2100} = {}) {
+  function create({minYear = -2000, maxYear = 3000} = {}) {
     // These are complete lunar relatedYear ranges, not partial Gregorian years.
-    integer(minYear, 'minYear', 1, 9998);
+    // Gregorian BCE 2000 = astronomical -1999. Its January dates may belong
+    // to lunar year -2000, so include that entire preceding year for round trips.
+    integer(minYear, 'minYear', -2000, 9998);
     integer(maxYear, 'maxYear', minYear, 9998);
     const formatter = new Intl.DateTimeFormat('en-u-ca-chinese-nu-latn', {
       calendar:'chinese', numberingSystem:'latn', timeZone:'Etc/GMT-8',
