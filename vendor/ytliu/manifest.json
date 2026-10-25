@@ -13,6 +13,11 @@
     "computation_simp.html": "d39993ed54790a1bf8adba76636687117657d52323ad48c2a73edee4f35da939",
     "guliuli_simp.html": "9350c4a445e90075401064e0b29dd41896e10f53d758d997e207dfdc67a03e6d",
     "split.js": "f026a1fb1bc9f55e66818b9374c2c20b853eb1d121f96fe8692ca6c1454e56f2",
-    "utilities.js": "0ac5c8d639596a6d72ecbf12240021a2993a994395c3d269541d34f997e5784f"
+    "utilities.js": "0ac5c8d639596a6d72ecbf12240021a2993a994395c3d269541d34f997e5784f",
+    "eras.js": "26be45ffddd268d00565d498ae162f48ca491870f1e1c7eaba6baeefb15e383e",
+    "era_names.html": "051785c818e35b92328d3b2ffd63f4f7f83027354db85c280be44ad3e0084757"
+  },
+  "upstreamPaths": {
+    "eras.js": "src/eras.js"
   }
 }

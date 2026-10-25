@@ -1,19 +1,19 @@
 <!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>历史历表与现代农历查询</title>
-<style>body{font:16px/1.7 system-ui;max-width:950px;margin:40px auto;padding:0 20px;color:#172b3a;background:#f6f8fa}h1{font-size:26px}fieldset{border:1px solid #ccd5dd;border-radius:10px;padding:20px;background:white}label{display:inline-block;margin:8px}input{width:85px}input,select,button{font:inherit;padding:6px}select{max-width:100%}button{cursor:pointer}pre{background:#142535;color:#edf7ff;overflow:auto;padding:20px;border-radius:10px;white-space:pre-wrap}small{display:block;color:#526674}</style>
+<style>body{font:16px/1.7 system-ui;max-width:950px;margin:40px auto;padding:0 20px;color:#172b3a;background:#f6f8fa}h1{font-size:26px}fieldset{border:1px solid #ccd5dd;border-radius:10px;padding:20px;background:white}label{display:inline-block;margin:8px}input{width:85px}input,select,button{font:inherit;padding:6px}select{max-width:100%}button{cursor:pointer}pre{background:#142535;color:#edf7ff;overflow:auto;padding:20px;border-radius:10px;white-space:pre-wrap}small{display:block;color:#526674}.note{background:white;border-left:3px solid #387c82;padding:12px 18px;margin:14px 0}.note p{margin:8px 0}.note button{font-size:14px;margin:4px}#noteSearch,#eraSearch{width:180px}details{margin:12px 0}summary{cursor:pointer}h2{font-size:21px}</style>
 <h1>历史历表与现代农历查询</h1>
 <p>历史模式查有来源的历表，保留同一天的多个朝代纪年；资料缺失时返回“无法确定”。现代模式按现代规则回推或预测。</p>
 <fieldset><legend>日期查询</legend>
 <label>依据 <select id="mode"><option value="historical">历史历表与研究重建</option><option value="modern">现代规则回推 / 预测（Intl）</option></select></label>
 <label>方向 <select id="direction"><option value="solar">西历 → 农历</option><option value="lunar">农历 → 西历</option><option value="civil">仅西历日期解析</option></select></label>
 <div id="yearFields"><label>纪年 <select id="era"><option value="ce">公元</option><option value="bce">公元前</option><option value="astronomical">天文纪年</option></select></label>
-<label>年 <input id="year" type="number" value="1662" required></label></div>
+<label>年 <input id="year" type="number" value="626" required></label></div>
 <div id="historyKindFields" hidden><label>反查方式 <select id="historyKind"><option value="era">年号纪年</option><option value="research">研究历法 N_y 年标签</option></select></label></div>
 <div id="researchFields" hidden><label>研究历法 <select id="researchCalendar"></select></label></div>
-<div id="historyFields" hidden><label>历史年号 <select id="eraId"></select></label><label>年号第几年 <input id="eraYear" type="number" value="1" min="1"></label></div>
-<label>月 <input id="month" type="number" value="2" required></label>
-<label>日 <input id="day" type="number" value="18" min="1" max="31" required></label>
+<div id="historyFields" hidden><label>检索年号／君主 <input id="eraSearch" placeholder="如：鲁隐公、康熙、宏光"></label><label>历史年号／君主纪年 <select id="eraId"></select></label><label>纪年第几年 <input id="eraYear" type="number" value="1" min="1"></label></div>
+<label>月 <input id="month" type="number" value="7" required></label>
+<label>日 <input id="day" type="number" value="5" min="1" max="31" required></label>
 <label>闰月 <select id="leap"><option value="">未指定（全部候选）</option><option value="false">普通月</option><option value="true">闰月</option></select></label>
 <label>西历 <select id="calendar"><option value="gregorian">回推格里高利历</option><option value="julian">回推儒略历</option><option value="auto">两种历法</option><option value="historical">1582-10-15 改历的地区</option></select></label>
 <button id="run" type="button">查询</button>
@@ -21,18 +21,48 @@
 <p><button id="historyExample">康熙元年正月初一</button> <button id="ancientExample">春秋历前 722 年</button> <button id="duplicateExample">239 年两个普通十二月</button> <button id="concurrentExample">清与南明并行纪年</button> <button id="bceExample">公元前 2000 年（查史料）</button> <button id="futureExample">公元 3000 年（现代预测）</button> <button id="leapExample">2023 二月初一（现代）</button> <button id="gapExample">西历改历缺日</button></p>
 <small>历史资料：DDBC / DILA 中国时间规范资料库 2012-02 版，CC BY-SA 3.0。默认排除来源标记为 P 的外推记录；年号起讫标记尚不完整，结果是有来源的重建记录，不是历史绝对准确性的保证。两条日号越界的源记录被隔离并报告冲突。</small>
 <small>历史输出保留来源纪年，可按年号或研究历表的 N_y 年标签反查。现代模式支持公元前 2000 年至公元 3000 年，使用天文纪年：公元前 2000 年 = -1999；该模式不表示当时实际颁历。</small>
-<pre id="result" role="status" aria-live="polite"></pre>
+<section aria-labelledby="notesHeading"><h2 id="notesHeading">当日史料备注</h2>
+<p>只记月的条目放在该月初一，只记年的放在该历年首日。归档日期不是确切发生日期；没有收录不表示当天没有事件。</p>
+<button id="monthNotes">查看该公历月逐日备注</button> <button id="yearNoteExample">三家分晋（年度事件）</button> <button id="monthNoteExample">景帝修阳陵、渭桥（月度事件）</button> <button id="regnalExample">鲁隐公元年正月初一</button>
+<div id="dailyNotes" aria-live="polite"></div></section>
+<details><summary>日期换算与来源 JSON</summary><pre id="result" role="status" aria-live="polite"></pre></details>
+<section aria-labelledby="searchHeading"><h2 id="searchHeading">检索史料</h2>
+<label>关键词 <input id="noteSearch" placeholder="如：日有食之、始皇"></label>
+<label>史书 <select id="noteBook"><option value="">全部</option><option value="shiji">史记</option><option value="hanshu">汉书</option><option value="tongjian">资治通鉴</option></select></label>
+<label>日期精度 <select id="notePrecision"><option value="">全部</option><option value="day">记日</option><option value="month">仅记月</option><option value="year">仅记年</option></select></label>
+<label>日期状态 <select id="noteResolution"><option value="">全部</option><option value="unique">一个候选日</option><option value="ambiguous">多个候选日</option><option value="unresolved">待核日期</option></select></label>
+<button id="findNotes">检索</button> <button id="moreNotes" hidden>下一页</button><div id="noteSearchResults" aria-live="polite"></div></section>
 <small>补充来源：Yuk Tung Liu 的 ChineseCalendar 历史重建研究（GPL-3.0），18 套历法方案。重建候选不等于已证实的实际颁历；古六历的年终置闰是一种研究假设。</small>
 <script>{{HISTORY_DATA}}</script>
 <script>{{RESEARCH_DATA}}</script>
+<script>{{ERA_DATA}}</script>
+<script>{{NOTES_DATA}}</script>
 <script>{{LIBRARY}}</script>
 <script>
 const $=id=>document.getElementById(id);
 const engines={historical:Lunisolar.create()};
-for(const e of engines.historical.eras()) { const o=document.createElement('option');o.value=e.id;o.textContent=[e.dynasty,e.emperor,e.name||'（来源未记年号名）'].join(' · ');$('eraId').append(o); }
+function listEras(){const previous=$('eraId').value;$('eraId').replaceChildren();for(const e of engines.historical.eras({search:$('eraSearch').value.trim()})){const o=document.createElement('option');o.value=e.id;o.textContent=[e.dynasty,e.emperor,e.name||'（来源未记年号名）',e.kind==='regnal-year'?'研究纪年':''].filter(Boolean).join(' · ');$('eraId').append(o);}if([...$('eraId').options].some(o=>o.value===previous))$('eraId').value=previous;}
+listEras();$('eraSearch').oninput=listEras;
 $('eraId').value='660';
 for(const c of engines.historical.calendars()){const o=document.createElement('option');o.value=c.id;o.textContent=c.name;$('researchCalendar').append(o);}
 function fields(){const historical=$('mode').value==='historical'&&$('direction').value==='lunar';const research=historical&&$('historyKind').value==='research';$('historyKindFields').hidden=!historical;$('historyFields').hidden=!historical||research;$('researchFields').hidden=!research;$('yearFields').hidden=historical&&!research;}
+let currentMatches=[],noteOffset=0;
+const precisionText={day:'原文记日',month:'原文仅记月；归档于该月初一',year:'原文仅记年；归档于该历年首日'};
+function showDate(jdn){const d=Lunisolar.fromJdn(jdn);example('historical','solar',d.year,d.month,d.day,'astronomical');}
+function renderNote(n,parent){
+ const card=document.createElement('article');card.className='note';card.dataset.noteId=n.id;
+ const head=document.createElement('strong');head.textContent=`《${n.book}》卷 ${n.volume} · ${precisionText[n.precision]}`;card.append(head);
+ const quote=document.createElement('p');quote.textContent=n.text;card.append(quote);
+ const info=document.createElement('small');info.textContent=`来源段号 ${n.paragraph}；${n.resolution==='unresolved'?'日期待核，未归入某一天':n.resolution==='ambiguous'?'历法换算有多个候选日期':'按研究历表换算'}。规则提取，尚非逐条校勘。`;card.append(info);
+ const link=document.createElement('a');link.href=n.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看固定版本原文';card.append(link);
+ for(const jdn of new Set(n.dateCandidates.map(c=>c.jdn))){const d=Lunisolar.fromJdn(jdn),button=document.createElement('button');button.textContent=`查看 ${d.year}-${d.month}-${d.day}（天文纪年公历）`;button.onclick=()=>showDate(jdn);card.append(button);}
+ parent.append(card);
+}
+function showNotes(matches){
+ $('dailyNotes').replaceChildren();
+ if(!matches.length){$('dailyNotes').textContent='没有可展示的日期候选。';return;}
+ for(const m of matches){const d=Lunisolar.fromJdn(m.jdn);const title=document.createElement('p');title.textContent=`${d.year}-${d.month}-${d.day}（天文纪年公历） · ${(m.notes||[]).length} 条已收录备注`;$('dailyNotes').append(title);for(const n of m.notes||[])renderNote(n,$('dailyNotes'));}
+}
 $('mode').onchange=fields;$('direction').onchange=fields;$('historyKind').onchange=fields;
 function run(){
  try {
@@ -65,11 +95,12 @@ function run(){
   }
   const title={none:'无匹配日期',unique:'一个候选日期（可能有多个历法标签）',ambiguous:'多个候选日期',undetermined:'无法确定：史料缺失或源数据冲突'}[result.status];
   $('result').textContent=title+'\n'+JSON.stringify(result,null,2);
- }catch(e){$('result').textContent='查询错误：'+e.message;}
+  currentMatches=result.matches;showNotes(result.matches.map(m=>({...m,notes:m.notes||engines.historical.notes(Lunisolar.fromJdn(m.jdn)).matches[0].notes})));
+ }catch(e){currentMatches=[];$('result').textContent='查询错误：'+e.message;$('dailyNotes').textContent='请先输入有效日期。';}
 }
 function example(mode,direction,year,month,day,era='ce'){$('mode').value=mode;$('direction').value=direction;$('year').value=year;$('month').value=month;$('day').value=day;$('era').value=era;$('calendar').value='gregorian';$('leap').value='';run();}
 $('run').onclick=run;
-$('historyExample').onclick=()=>{$('historyKind').value='era';$('eraId').value='660';$('eraYear').value=1;example('historical','lunar',1662,1,1);};
+$('historyExample').onclick=()=>{$('eraSearch').value='';listEras();$('historyKind').value='era';$('eraId').value='660';$('eraYear').value=1;example('historical','lunar',1662,1,1);};
 $('ancientExample').onclick=()=>{$('historyKind').value='research';$('researchCalendar').value='ytliu/chunqiu';example('historical','lunar',-721,1,1,'astronomical');$('calendar').value='julian';run();};
 $('duplicateExample').onclick=()=>{$('historyKind').value='research';$('researchCalendar').value='ytliu/main';example('historical','lunar',239,12,1);};
 $('concurrentExample').onclick=()=>example('historical','solar',1645,1,28);
@@ -77,5 +108,16 @@ $('bceExample').onclick=()=>example('historical','solar',2000,1,1,'bce');
 $('futureExample').onclick=()=>example('modern','solar',3000,12,31);
 $('leapExample').onclick=()=>example('modern','lunar',2023,2,1);
 $('gapExample').onclick=()=>{example('historical','civil',1582,10,10);$('calendar').value='historical';run();};
+$('regnalExample').onclick=()=>{$('eraSearch').value='鲁隐公';listEras();$('historyKind').value='era';$('eraYear').value=1;example('historical','lunar',-721,1,1,'astronomical');};
+$('yearNoteExample').onclick=()=>showDate(engines.historical.note('tongjian:1:3:0').dateCandidates[0].jdn);
+$('monthNoteExample').onclick=()=>showDate(engines.historical.note('shiji:11:5:0').dateCandidates[0].jdn);
+$('monthNotes').onclick=()=>{
+ if(!currentMatches.length){$('dailyNotes').textContent='请先查询一个有效日期。';return;}
+ const d=Lunisolar.fromJdn(currentMatches[0].jdn),next=d.month===12?{year:d.year+1,month:1,day:1}:{year:d.year,month:d.month+1,day:1};
+ const last=Lunisolar.fromJdn(Lunisolar.toJdn(next)-1);const result=engines.historical.notesRange({...d,day:1},last);
+ $('dailyNotes').replaceChildren();for(const day of result.days){const detail=document.createElement('details'),s=document.createElement('summary');const date=Lunisolar.fromJdn(day.jdn);s.textContent=`${date.year}-${date.month}-${date.day} · ${day.notes.length} 条已收录备注`;detail.append(s);for(const n of day.notes)renderNote(n,detail);$('dailyNotes').append(detail);}
+};
+function searchNotes(){const result=engines.historical.searchNotes({search:$('noteSearch').value.trim(),bookId:$('noteBook').value||undefined,precision:$('notePrecision').value||undefined,resolution:$('noteResolution').value||undefined,offset:noteOffset,limit:20});$('noteSearchResults').replaceChildren();const count=document.createElement('p');count.textContent=`共 ${result.total} 条；本页 ${result.notes.length} 条`;$('noteSearchResults').append(count);for(const n of result.notes)renderNote(n,$('noteSearchResults'));$('moreNotes').hidden=noteOffset+20>=result.total;}
+$('findNotes').onclick=()=>{noteOffset=0;searchNotes();};$('moreNotes').onclick=()=>{noteOffset+=20;searchNotes();};
 run();
 </script></html>

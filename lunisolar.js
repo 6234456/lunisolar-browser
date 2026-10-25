@@ -89,7 +89,53 @@
     return calendars.map(c => ({calendar:c, ...fromJdn(jdn,c)}));
   }
 
+  const copy=value=>JSON.parse(JSON.stringify(value));
+  function createNotes() {
+    const data=root.LunisolarNotesData?copy(root.LunisolarNotesData):null;
+    const notes=data?.notes||[],byDay=new Map(),byId=new Map();
+    for(const n of notes){
+      byId.set(n.id,n);
+      for(const jdn of new Set(n.dateCandidates.map(c=>c.jdn))){
+        if(!byDay.has(jdn))byDay.set(jdn,[]);byDay.get(jdn).push(n);
+      }
+    }
+    function attach(match){
+      match.notes=copy(byDay.get(match.jdn)||[]);
+      match.notesStatus=!data?'not-loaded':match.notes.length?'indexed-notes':'no-indexed-notes';
+      return match;
+    }
+    const api={
+      notes(date,options={}) {
+        const result=resolveSolar(date,options);result.matches.forEach(attach);
+        return {...result,notesCoverage:'partial',notesDataLoaded:!!data};
+      },
+      notesRange(from,to,options={}) {
+        const a=resolveSolar(from,options),b=resolveSolar(to,options);
+        if(a.matches.length!==1||b.matches.length!==1)throw new RangeError('日期区间的起止必须各自确定为一天');
+        const start=a.matches[0].jdn,end=b.matches[0].jdn;
+        integer(end-start,'区间跨度',0,365);
+        const days=Array.from({length:end-start+1},(_,i)=>attach({jdn:start+i,dayIndex:start+i-EPOCH_JDN,solar:solarAliases(start+i,options)}));
+        return {days,notesCoverage:'partial',notesDataLoaded:!!data};
+      },
+      searchNotes({search='',bookId,precision,resolution,year,offset=0,limit=50}={}) {
+        if(typeof search!=='string')throw new TypeError('search 必须是字符串');
+        if(bookId!==undefined&&!['tongjian','shiji','hanshu'].includes(bookId))throw new TypeError('未知史书 bookId');
+        if(precision!==undefined&&!['day','month','year'].includes(precision))throw new TypeError('未知日期精度');
+        if(resolution!==undefined&&!['unique','ambiguous','unresolved'].includes(resolution))throw new TypeError('未知日期解析状态');
+        if(year!==undefined)integer(year,'year',-9999,9999);
+        integer(offset,'offset',0,Number.MAX_SAFE_INTEGER);integer(limit,'limit',1,200);
+        const found=notes.filter(n=>(!bookId||n.bookId===bookId)&&(!precision||n.precision===precision)&&
+          (!resolution||n.resolution===resolution)&&(year===undefined||n.recordedDate.year===year)&&
+          (!search||[n.text,n.sourceRegnalLabel||'',n.sourceArticleTitle||'',n.book].some(t=>t.includes(search))));
+        return {total:found.length,offset,limit,notes:copy(found.slice(offset,offset+limit)),notesCoverage:'partial',notesDataLoaded:!!data};
+      },
+      note(id) { if(typeof id!=='string')throw new TypeError('id 必须是字符串');return copy(byId.get(id)||null); }
+    };
+    return {attach,api,metadata:{loaded:!!data,coverage:'partial',stats:copy(data?.stats||{}),source:copy(data?.source||null)}};
+  }
+
   function createModern({minYear = -2000, maxYear = 3000} = {}) {
+    const annotations=createNotes();
     // These are complete lunar relatedYear ranges, not partial Gregorian years.
     // Gregorian BCE 2000 = astronomical -1999. Its January dates may belong
     // to lunar year -2000, so include that entire preceding year for round trips.
@@ -143,14 +189,16 @@
       return records;
     }
     return Object.freeze({
+      ...annotations.api,
       metadata:Object.freeze({mode:'modern', basis:'modern-projection', engine:'Intl/chinese', minYear, maxYear,
-        timeZone:'UTC+08:00', historicalAuthority:false, epoch:'Gregorian 0001-01-01 = dayIndex 0'}),
+        notes:annotations.metadata,timeZone:'UTC+08:00', historicalAuthority:false, epoch:'Gregorian 0001-01-01 = dayIndex 0'}),
       solarToLunar(date, options = {}) {
         const result = resolveSolar(date, options);
         for (const match of result.matches) {
           const lunar = read(match.jdn);
           checkYear(lunar.year); // Never return a partial candidate list on range errors.
           match.lunar = lunar;
+          annotations.attach(match);
         }
         return {...result, basis:'modern-projection', source:'Intl/chinese'};
       },
@@ -167,6 +215,7 @@
             (query.isLeap === undefined || r.lunar.isLeap === query.isLeap))
           .map(r => ({jdn:r.jdn, dayIndex:r.jdn - EPOCH_JDN,
             lunar:{...r.lunar}, solar:solarAliases(r.jdn, options)}));
+        matches.forEach(annotations.attach);
         return {...outcome(matches), basis:'modern-projection', source:'Intl/chinese'};
       }
     });
@@ -179,11 +228,15 @@
       throw new Error('历史模式需要先加载 data/dila-history.js；现代回推请显式使用 mode:"modern"');
     // Copy the data so later edits to the public data object cannot alter queries.
     const source = JSON.parse(JSON.stringify(data.source));
-    const eras = JSON.parse(JSON.stringify(data.eras));
+    const supplement=includeReconstructions?root.LunisolarEraData:null;
+    const eras = copy({...data.eras,...(supplement?.eras||{})});
+    for(const patch of supplement?.aliasPatches||[])for(const era of Object.values(eras))
+      if(era.name===patch.name&&era.dynasty===patch.dynasty){era.aliases=[...(era.aliases||[]),...patch.aliases];era.aliasSource=patch.sourceUrl;}
+    const annotations=createNotes();
     const research=includeReconstructions?root.LunisolarResearchData:null;
     const calendars=JSON.parse(JSON.stringify(research?.calendars||{}));
-    const sources=[source,...(research?[JSON.parse(JSON.stringify(research.source))]:[])];
-    const rows = [...data.months,...(research?.months||[])].map(r => r.slice()).sort((a,b)=>a[6]-b[6]||a[0]-b[0]);
+    const sources=[source,...(research?[copy(research.source)]:[]),...(supplement?[copy(supplement.source)]:[])];
+    const rows = [...data.months,...(research?.months||[]),...(supplement?.months||[])].map(r => r.slice()).sort((a,b)=>a[6]-b[6]||a[0]-b[0]);
     const byEra = new Map();
     const byCalendarYear = new Map();
     const prefixEnd = [];
@@ -211,6 +264,10 @@
         month:r[3],monthName:r[4],day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],
         sourceId:research.source.id,basis:'historical-reconstruction'};
       const era=eras[r[1]];
+      if(r[11])return {eraId:era.id,eraName:era.name,eraYear:r[2],dynastyId:era.dynastyId,
+        dynasty:era.dynasty,emperor:era.emperor,kind:'regnal-year',month:r[3],monthName:r[4],
+        day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],calendarBasisId:r[11],
+        sourceId:supplement.source.id,basis:'regnal-reconstruction',boundaryPrecision:'year'};
       return {eraId:era.id,...(era.name?{eraName:era.name}:{}),eraYear:r[2],dynastyId:era.dynastyId,
         dynasty:era.dynasty,emperor:era.emperor,month:r[3],monthName:r[4],
         day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],sourceId:source.id,sourceStatus:r[9],
@@ -218,8 +275,9 @@
     }
     function finish(matches,issues=[]) {
       matches.sort((a,b)=>a.jdn-b.jdn);
+      matches.forEach(annotations.attach);
       return {...outcome(matches),status:issues.length?'undetermined':outcome(matches).status,
-        basis:research?'historical-sources':'historical-table',source:JSON.parse(JSON.stringify(source)),
+        basis:research||supplement?'historical-sources':'historical-table',source:JSON.parse(JSON.stringify(source)),
         sources:JSON.parse(JSON.stringify(sources)),
         complete:issues.length===0,issues};
     }
@@ -229,7 +287,7 @@
       if(!match.lunars.some(l=>l.recordId===r[0])) match.lunars.push(label(r,jdn));
     }
     function filter(r,options) {
-      return (options.calendarId===undefined || r[10]===options.calendarId) &&
+      return (options.calendarId===undefined || (r[10]||r[11])===options.calendarId) &&
         (options.eraId===undefined || !r[10]&&r[1]===options.eraId) &&
         (options.dynastyId===undefined || !r[10]&&eras[r[1]].dynastyId===options.dynastyId);
     }
@@ -238,16 +296,17 @@
       if(options.calendarId!==undefined&&typeof options.calendarId!=='string')throw new TypeError('calendarId 必须是字符串');
     }
     return Object.freeze({
-      metadata:Object.freeze({mode:'historical',engine:research?'historical/month-tables':'DILA/month-table',
+      ...annotations.api,
+      metadata:Object.freeze({mode:'historical',engine:research||supplement?'historical/month-tables':'DILA/month-table',
         firstJdn:rows[0][6],lastJdn:prefixEnd.at(-1),historicalAuthority:false,
-        includeProleptic,includeReconstructions,reconstructionDataLoaded:!!research,
+        includeProleptic,includeReconstructions,reconstructionDataLoaded:!!research,eraSupplementLoaded:!!supplement,notes:annotations.metadata,
         source:JSON.parse(JSON.stringify(source)),sources:JSON.parse(JSON.stringify(sources))}),
       calendars() { return Object.values(calendars).map(c=>({...c})); },
       eras({search='',dynastyId}={}) {
         if(typeof search!=='string') throw new TypeError('search 必须是字符串');
         selectors({dynastyId});
         return Object.values(eras).filter(e=>(dynastyId===undefined||e.dynastyId===dynastyId) &&
-          [e.name,e.dynasty,e.emperor].some(v=>v.includes(search))).map(e=>({...e}));
+          [e.name,e.dynasty,e.emperor,...(e.aliases||[])].some(v=>v.includes(search))).map(e=>copy(e));
       },
       solarToLunar(date,options={}) {
         selectors(options);
@@ -292,12 +351,12 @@
         if(query.eraId!==undefined)integer(query.eraId,'eraId',1,65535);
         if(query.eraName!==undefined && (typeof query.eraName!=='string'||!query.eraName))throw new TypeError('eraName 必须是非空字符串');
         integer(query.eraYear,'eraYear',1,65535);integer(query.day,'day',1,30);
-        if(query.month!==undefined && ![-2,-1,1,2,3,4,5,6,7,8,9,10,11,12].includes(query.month))throw new RangeError('未知的历史月编号');
+        if(query.month!==undefined && ![-2,-1,1,2,3,4,5,6,7,8,9,10,11,12,13].includes(query.month))throw new RangeError('未知的历史月编号');
         if(query.monthName!==undefined && (typeof query.monthName!=='string'||!query.monthName))throw new TypeError('monthName 必须是非空字符串');
         if(query.month===undefined&&query.monthName===undefined)throw new TypeError('需要 month 或 monthName');
         if(query.isLeap!==undefined&&typeof query.isLeap!=='boolean')throw new TypeError('isLeap 必须是布尔值或省略');
         const selected=Object.values(eras).filter(e=>(query.eraId===undefined||e.id===query.eraId)&&
-          (query.eraName===undefined||e.name===query.eraName));
+          (query.eraName===undefined||e.name===query.eraName||(e.aliases||[]).includes(query.eraName)));
         const yearRows=selected.flatMap(e=>byEra.get(e.id)||[]).filter(r=>r[2]===query.eraYear&&filter(r,options));
         if(!yearRows.length)return finish([],[{code:'NO_HISTORICAL_RECORD'}]);
         const matches=[],issues=[];

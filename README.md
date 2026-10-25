@@ -2,7 +2,7 @@
 
 浏览器端西历与中国历法双向查询，支持多候选、儒略历 / 格里高利历、指定地区改历断档。
 
-**0.4.0 扩充历史来源：DILA 历表 + Yuk Tung Liu 的 18 套研究历法。默认保留各来源候选，不再把 Intl 的现代回推结果当作历史日期。** 现代回推仍可显式选择，范围为公元前 2000 年至公元 3000 年。
+**0.5.0 增加年号／君主纪年补充和每日史料备注。** 保留 DILA 历表、Yuk Tung Liu 的 18 套研究历法与多候选查询。现代回推仍可显式选择，范围为公元前 2000 年至公元 3000 年。
 
 公元前 2000 年至公元 3000 年不存在一份可据此保证完整、唯一且符合实际颁历的历史资料。本项目不会用天文回推填补历史资料空白，也不会把未来日期称为实际颁历。
 
@@ -13,6 +13,8 @@
 ```html
 <script src="data/dila-history.js"></script>
 <script src="data/research-history.js"></script>
+<script src="data/era-supplement.js"></script>
+<script src="data/history-notes.js"></script>
 <script src="lunisolar.js"></script>
 <script>
 const history = Lunisolar.create();
@@ -70,6 +72,83 @@ console.log(history.solarToLunar({ year: -1999, month: 1, day: 1 }));
 - 历史特殊月保留来源编号 `-1`、`-2` 和原始 `monthName`；不强行改成现代的一至十二月。反查可以用 `monthName` 替代 `month`。
 - 年号在月中变更时，使用源记录的 `start_from` 计算日号，不把每条记录的第一天误当作初一。
 - 缺少 DILA 数据脚本时会报错，不偷偷使用 Intl。补充研究脚本可以不加载；`metadata.reconstructionDataLoaded` 表示它是否可用。
+
+## 0.5.0 年号与君主纪年
+
+原有 **928** 项 DILA 年号／纪年继续保留，新增 **47** 组周、鲁、秦君主纪年，共 **975** 项。补充资料生成 **12,688** 条对应月段，可用同一个 `eras()`、`solarToLunar()`、`lunarToSolar()` 接口查询。数据来自固定版本 ChineseCalendar 的 [`eras.js`](vendor/ytliu/eras.js) 和[纪年说明](vendor/ytliu/era_names.html)，该研究项目列明万国鼎《中国历史纪年表》等参考资料；早期君主纪年的原始文献依据另列于结果的 `primarySources`。
+
+早期君主纪年标记为 `kind:'regnal-year'`、`basis:'regnal-reconstruction'`，不把“鲁隐公”称作汉武帝以后意义上的年号。补充方案仅给出年界，未据此编造即位、退位的精确日界；同名君主、纪年异说及同年多个称号均不能靠名称消除歧义。例如两位“鲁文公”有不同 ID；上游“周平王”采用前 772 年纪元，与常见前 770 年方案不同，已在条目 `limitation` 中明示。
+
+```js
+const history = Lunisolar.create();
+const lu = history.eras({search:'鲁隐公'})[0]; // 简繁别名
+history.lunarToSolar(
+  {eraId:lu.id, eraYear:1, month:1, day:1},
+  {calendar:'julian'}
+); // 春秋历研究方案：儒略历前722年1月16日
+
+history.eras({search:'宏光'}); // 返回弘光，保留异名与别名出处
+history.lunarToSolar({eraName:'宏光',eraYear:1,month:1,day:1});
+```
+
+为现有 DILA 条目补充九组有出处的异名规则，如征和／延和、元寿／元受、建武中元／中元、弘光／宏光。异名只扩大检索与反查，不覆盖原名，也不合并不同政权的同名年号。`includeReconstructions:false` 同时关闭新增君主纪年；原有 DILA 数据不会被改写。
+
+## 每日 notes：史记、汉书、资治通鉴
+
+新增 **10,275** 条古文纪事摘录：
+
+| 史书 | 本次提取范围 | 备注数 |
+| --- | --- | ---: |
+| 《资治通鉴》 | 扫描全部 294 卷，按保守日期规则提取 | 10,065 |
+| 《史记》 | 选定本纪的段首明示纪年条目 | 50 |
+| 《汉书》 | 选定帝纪的段首明示纪年条目 | 160 |
+
+其中 **9,814** 条有日期候选，**461** 条不能匹配所用历表，保留 `resolution:'unresolved'`，不挂到某一天。按来源日期精度分为记日 **7,372** 条、仅记月 **2,354** 条、仅记年 **549** 条。每条摘录都可追溯到固定版本、书名、卷次和段号。
+
+《史记》《汉书》是正史，《资治通鉴》是官修编年通史；本项目采用的**电子转录本不是官方校勘定本**。摘录来自[固定版本古文转录](https://github.com/hanzhaodeng/chinese-ancient-text/tree/01a1183cd9bbc243bb156967043c32b6685c0d2f)，快照、作者、校验和及已知问题保存在 [`vendor/chronicles`](vendor/chronicles)。这些是有来源的规则提取结果，不声称已经逐条完成史学校勘。
+
+### 归档规则
+
+- 原文明记月日或干支日：在对应历表中核对日期；有“朔／晦”时同时核对月首／月末。多个历法候选全部保留。
+- **只记月份：放在该历法该月初一**，`precision:'month'`、`placement:'month-start'`、`isDisplayAnchor:true`。
+- **只记年份：放在该历法该年首日**，`precision:'year'`、`placement:'year-start'`、`isDisplayAnchor:true`。秦汉年首可能为十月，不能一律放在正月初一或公历 1 月 1 日。
+- 月首、年首是显示位置，不是推定的发生日期。没有收录备注时返回 `notes:[]`，不表示当天没有历史事件。
+- 仅有季节、干支日缺少可靠月份上下文、数字转录冲突等，不自动补齐。未挂入日历的提取问题与三个冲突年标题见 [`extraction-report.json`](data/chronicles/extraction-report.json)。
+
+提取范围：主要取段首明示日期后的第一句；《资治通鉴》还取明确编年标题后的第一条无细日期纪事。句内出现后一个日期时截断摘录，避免把后面的事件放到前面的日期。不会从演说、追叙中任意抓取日期，也不会将整段跨日叙事当成同日事件。存在多日期、未支持句式或缺少上下文的原文仍需人工整理，本版不是三部书的完整事件数据库。
+
+### 查询接口
+
+加载 `data/history-notes.js` 后，历史与现代两种模式的换算结果均增加 `matches[].notes`；备注始终按绝对日 JDN 关联，**不使用 Intl 回推结果给史料定日**。
+
+```js
+const history = Lunisolar.create();
+
+// 当天备注；该接口也能查没有农历记录的西历日期。
+history.notes({year:626,month:7,day:2}, {calendar:'julian'});
+// 《资治通鉴》卷191：庚申，世民帅长孙无忌等入，伏兵于玄武门。
+
+// 每一天都返回一项，包括 notes:[] 的日子；区间包含两端，最多366天。
+history.notesRange(
+  {year:626,month:7,day:1},
+  {year:626,month:7,day:31},
+  {calendar:'julian'}
+);
+
+// 检索与分页；precision 为 day / month / year。
+history.searchNotes({search:'阳陵',bookId:'shiji',precision:'month',offset:0,limit:20});
+history.searchNotes({resolution:'unresolved'}); // 待核日期条目
+history.searchNotes({year:626}); // 史料编年对应的天文纪年标签
+history.note('shiji:11:5:0'); // 稳定摘录 ID；找不到时返回 null
+```
+
+单条备注包含：`id`、`text`（原文摘录）、`bookId`、`book`、`volume`、`paragraph`（从 0 起）、`precision`、`recordedDate`、`placement`、`isDisplayAnchor`、`resolution`、`dateCandidates`、`sourceUrl` 和 `review`。汉书上、下卷另有 `sourceArticle`、`sourceArticleTitle` 定位。`sourceUrl` 指向实际使用的固定版本；`readingUrl` 只是另一个阅读入口，不保证其文字与快照相同。
+
+`dateCandidates` 分别标明 JDN、研究历法 ID 和月日；同一绝对日的多份历法解释保留在同一备注中，不重复列成多条事件。同书不同条、不同史书的记载不做臆测性合并。前秦史事没有唯一历法依据时保留多个研究方案的归档候选。
+
+备注数据可选加载。`metadata.notes.loaded` / `notesDataLoaded` 表示是否加载；每一天的 `notesStatus` 区分 `not-loaded`、`no-indexed-notes` 和 `indexed-notes`。`notesCoverage:'partial'` 明确表示事件收录不完备。`complete` 仍只指日期转换是否有已知缺口／冲突，不表示史料收录完备。`includeReconstructions:false` 影响历法候选和补充纪年，不禁用独立的史料备注索引；不需要备注时可不加载该脚本。
+
+离线示例新增：年号搜索、当日备注、整公历月逐日展开、按史书／精度／日期状态检索、候选日期跳转及原文链接。完整单文件约 17 MiB；作为库使用时，可按需加载上述可选数据脚本。
 
 ## 0.4.0 补充覆盖
 
@@ -201,12 +280,15 @@ npm test                 # 现代回归 + DILA + 补充研究历表测试（Node
 npm run test:range      # 较慢，仅验证现代回推模式 5001 个农历年的结构
 npm run build:history  # 从固定原始包重新生成历史数据，需要 Python 3
 npm run build:research # 从固定研究源码生成补充历表和覆盖报告
+npm run build:notes    # 生成君主纪年、史料摘录、日期候选和提取报告
 npm run build:demo     # 重新生成单文件离线示例
 ```
 
 历史测试验证 103,995 个有效 standard 月段边界的双向查询，覆盖同日多朝代、同名年号、多闰月候选、特殊月名、月中改元、资料缺失、外推标记与源数据冲突。1662-02-18 是防止历史查询误走 Intl 的差异回归案例。
 
 补充研究历表还验证了 **137,092** 个新增月段边界的双向查询，以及春秋历锚点、239 年重复十二月、秦汉改历衔接、研究数据开关、资料截止日和原 7 段空档。
+
+0.5.0 测试逐条核对 **10,275** 段摘录确实包含于固定原文，检查 **10,708** 个归档候选的干支／朔晦／月首／年首规则，并验证 **25,376** 次补充君主纪年月界往返。独立日期案例为玄武门之变（儒略历 626-07-02），另检查同句后续日期不会错误归档、改历缺日、异名、待核条目、数据未加载及返回对象隔离。
 
 这些检查验证转换实现及来源的一致性，不是对源历表历史正确性的独立证明。
 

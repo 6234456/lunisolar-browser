@@ -1,0 +1,536 @@
+{
+  "shiji": [
+    {
+      "article": 6,
+      "volume": 6,
+      "from": 0,
+      "to": 45,
+      "prefix": "",
+      "firstYear": -245,
+      "maxYear": 37,
+      "label": "秦王政／始皇帝"
+    },
+    {
+      "article": 6,
+      "volume": 6,
+      "from": 46,
+      "to": 56,
+      "prefix": "(?:二世皇帝)?",
+      "firstYear": -208,
+      "maxYear": 3,
+      "label": "秦二世"
+    },
+    {
+      "article": 8,
+      "volume": 8,
+      "from": 29,
+      "to": 84,
+      "prefix": "",
+      "firstYear": -205,
+      "maxYear": 12,
+      "label": "汉高祖"
+    },
+    {
+      "article": 9,
+      "volume": 9,
+      "from": 4,
+      "to": 5,
+      "prefix": "",
+      "firstYear": -193,
+      "maxYear": 7,
+      "label": "汉惠帝"
+    },
+    {
+      "article": 9,
+      "volume": 9,
+      "from": 6,
+      "to": 10,
+      "prefix": "",
+      "firstYear": -186,
+      "maxYear": 8,
+      "label": "汉高后"
+    },
+    {
+      "article": 10,
+      "volume": 10,
+      "from": 12,
+      "to": 31,
+      "prefix": "",
+      "firstYear": -178,
+      "maxYear": 17,
+      "label": "汉文帝前元"
+    },
+    {
+      "article": 11,
+      "volume": 11,
+      "from": 1,
+      "to": 7,
+      "prefix": "",
+      "firstYear": -155,
+      "maxYear": 7,
+      "label": "汉景帝前元"
+    },
+    {
+      "article": 11,
+      "volume": 11,
+      "from": 8,
+      "to": 13,
+      "prefix": "中",
+      "firstYear": -148,
+      "maxYear": 6,
+      "label": "汉景帝中元"
+    },
+    {
+      "article": 11,
+      "volume": 11,
+      "from": 14,
+      "to": 16,
+      "prefix": "後",
+      "firstYear": -142,
+      "maxYear": 3,
+      "label": "汉景帝后元"
+    }
+  ],
+  "hanshu": [
+    {
+      "article": 1,
+      "volume": 1,
+      "from": 27,
+      "to": 72,
+      "prefix": "",
+      "firstYear": -205,
+      "maxYear": 12,
+      "label": "高帝纪上"
+    },
+    {
+      "article": 2,
+      "volume": 1,
+      "from": 0,
+      "to": 68,
+      "prefix": "",
+      "firstYear": -205,
+      "maxYear": 12,
+      "label": "高帝纪下"
+    },
+    {
+      "article": 3,
+      "volume": 2,
+      "from": 2,
+      "to": 29,
+      "prefix": "",
+      "firstYear": -193,
+      "maxYear": 7,
+      "label": "惠帝纪"
+    },
+    {
+      "article": 4,
+      "volume": 3,
+      "from": 1,
+      "to": 16,
+      "prefix": "",
+      "firstYear": -186,
+      "maxYear": 8,
+      "label": "高后纪"
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 4,
+      "to": 64,
+      "prefix": "",
+      "firstYear": -178,
+      "maxYear": 16,
+      "label": "文帝纪"
+    },
+    {
+      "article": 5,
+      "volume": 4,
+      "from": 65,
+      "to": 76,
+      "prefix": "(?:后)?",
+      "firstYear": -162,
+      "maxYear": 7,
+      "label": "文帝纪·后"
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 2,
+      "to": 34,
+      "prefix": "",
+      "firstYear": -155,
+      "maxYear": 7,
+      "label": "景帝纪"
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 35,
+      "to": 64,
+      "prefix": "(?:中)?",
+      "firstYear": -148,
+      "maxYear": 6,
+      "label": "景帝纪·中"
+    },
+    {
+      "article": 6,
+      "volume": 5,
+      "from": 65,
+      "to": 81,
+      "prefix": "(?:后)?",
+      "firstYear": -142,
+      "maxYear": 3,
+      "label": "景帝纪·后"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 1,
+      "to": 28,
+      "prefix": "(?:建元)?",
+      "firstYear": -139,
+      "maxYear": 6,
+      "label": "武帝纪·建元"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 29,
+      "to": 55,
+      "prefix": "(?:元光)?",
+      "firstYear": -133,
+      "maxYear": 6,
+      "label": "武帝纪·元光"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 56,
+      "to": 80,
+      "prefix": "(?:元朔)?",
+      "firstYear": -127,
+      "maxYear": 6,
+      "label": "武帝纪·元朔"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 81,
+      "to": 114,
+      "prefix": "(?:元狩)?",
+      "firstYear": -121,
+      "maxYear": 6,
+      "label": "武帝纪·元狩"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 115,
+      "to": 145,
+      "prefix": "(?:元鼎)?",
+      "firstYear": -115,
+      "maxYear": 6,
+      "label": "武帝纪·元鼎"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 146,
+      "to": 179,
+      "prefix": "(?:元封)?",
+      "firstYear": -109,
+      "maxYear": 6,
+      "label": "武帝纪·元封"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 180,
+      "to": 202,
+      "prefix": "(?:太初)?",
+      "firstYear": -103,
+      "maxYear": 4,
+      "label": "武帝纪·太初"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 203,
+      "to": 221,
+      "prefix": "(?:天汉)?",
+      "firstYear": -99,
+      "maxYear": 4,
+      "label": "武帝纪·天汉"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 222,
+      "to": 237,
+      "prefix": "(?:太始)?",
+      "firstYear": -95,
+      "maxYear": 4,
+      "label": "武帝纪·太始"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 238,
+      "to": 260,
+      "prefix": "(?:征和)?",
+      "firstYear": -91,
+      "maxYear": 4,
+      "label": "武帝纪·征和"
+    },
+    {
+      "article": 7,
+      "volume": 6,
+      "from": 261,
+      "to": 269,
+      "prefix": "(?:后元)?",
+      "firstYear": -87,
+      "maxYear": 2,
+      "label": "武帝纪·后元"
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 9,
+      "to": 47,
+      "prefix": "(?:始元)?",
+      "firstYear": -85,
+      "maxYear": 7,
+      "label": "昭帝纪·始元"
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 48,
+      "to": 76,
+      "prefix": "(?:元凤)?",
+      "firstYear": -79,
+      "maxYear": 6,
+      "label": "昭帝纪·元凤"
+    },
+    {
+      "article": 8,
+      "volume": 7,
+      "from": 77,
+      "to": 81,
+      "prefix": "(?:元平)?",
+      "firstYear": -73,
+      "maxYear": 1,
+      "label": "昭帝纪·元平"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 8,
+      "to": 28,
+      "prefix": "(?:本始)?",
+      "firstYear": -72,
+      "maxYear": 4,
+      "label": "宣帝纪·本始"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 29,
+      "to": 54,
+      "prefix": "(?:地节)?",
+      "firstYear": -68,
+      "maxYear": 4,
+      "label": "宣帝纪·地节"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 55,
+      "to": 78,
+      "prefix": "(?:元康)?",
+      "firstYear": -64,
+      "maxYear": 4,
+      "label": "宣帝纪·元康"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 79,
+      "to": 99,
+      "prefix": "(?:神爵)?",
+      "firstYear": -60,
+      "maxYear": 4,
+      "label": "宣帝纪·神爵"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 100,
+      "to": 116,
+      "prefix": "(?:五凤)?",
+      "firstYear": -56,
+      "maxYear": 4,
+      "label": "宣帝纪·五凤"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 117,
+      "to": 137,
+      "prefix": "(?:甘露)?",
+      "firstYear": -52,
+      "maxYear": 4,
+      "label": "宣帝纪·甘露"
+    },
+    {
+      "article": 9,
+      "volume": 8,
+      "from": 138,
+      "to": 144,
+      "prefix": "(?:黄龙)?",
+      "firstYear": -48,
+      "maxYear": 1,
+      "label": "宣帝纪·黄龙"
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 2,
+      "to": 28,
+      "prefix": "(?:初元)?",
+      "firstYear": -47,
+      "maxYear": 5,
+      "label": "元帝纪·初元"
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 29,
+      "to": 51,
+      "prefix": "(?:永光)?",
+      "firstYear": -42,
+      "maxYear": 5,
+      "label": "元帝纪·永光"
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 52,
+      "to": 71,
+      "prefix": "(?:建昭)?",
+      "firstYear": -37,
+      "maxYear": 5,
+      "label": "元帝纪·建昭"
+    },
+    {
+      "article": 10,
+      "volume": 9,
+      "from": 72,
+      "to": 80,
+      "prefix": "(?:竟宁)?",
+      "firstYear": -32,
+      "maxYear": 1,
+      "label": "元帝纪·竟宁"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 4,
+      "to": 36,
+      "prefix": "(?:建始)?",
+      "firstYear": -31,
+      "maxYear": 4,
+      "label": "成帝纪·建始"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 37,
+      "to": 53,
+      "prefix": "(?:河平)?",
+      "firstYear": -27,
+      "maxYear": 4,
+      "label": "成帝纪·河平"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 54,
+      "to": 70,
+      "prefix": "(?:阳朔)?",
+      "firstYear": -23,
+      "maxYear": 4,
+      "label": "成帝纪·阳朔"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 71,
+      "to": 86,
+      "prefix": "(?:鸿嘉)?",
+      "firstYear": -19,
+      "maxYear": 4,
+      "label": "成帝纪·鸿嘉"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 87,
+      "to": 107,
+      "prefix": "(?:永始)?",
+      "firstYear": -15,
+      "maxYear": 4,
+      "label": "成帝纪·永始"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 108,
+      "to": 125,
+      "prefix": "(?:元延)?",
+      "firstYear": -11,
+      "maxYear": 4,
+      "label": "成帝纪·元延"
+    },
+    {
+      "article": 11,
+      "volume": 10,
+      "from": 126,
+      "to": 139,
+      "prefix": "(?:绥和)?",
+      "firstYear": -7,
+      "maxYear": 2,
+      "label": "成帝纪·绥和"
+    },
+    {
+      "article": 12,
+      "volume": 11,
+      "from": 11,
+      "to": 36,
+      "prefix": "(?:建平)?",
+      "firstYear": -5,
+      "maxYear": 4,
+      "label": "哀帝纪·建平"
+    },
+    {
+      "article": 12,
+      "volume": 11,
+      "from": 37,
+      "to": 46,
+      "prefix": "(?:元寿)?",
+      "firstYear": -1,
+      "maxYear": 2,
+      "label": "哀帝纪·元寿"
+    },
+    {
+      "article": 13,
+      "volume": 12,
+      "from": 2,
+      "to": 46,
+      "prefix": "(?:元始)?",
+      "firstYear": 1,
+      "maxYear": 5,
+      "label": "平帝纪·元始"
+    }
+  ]
+}

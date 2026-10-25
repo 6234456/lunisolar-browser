@@ -1,0 +1,29 @@
+{
+  "repository": "https://github.com/hanzhaodeng/chinese-ancient-text",
+  "revision": "01a1183cd9bbc243bb156967043c32b6685c0d2f",
+  "accessed": "2026-10-25",
+  "files": {
+    "tongjian": {
+      "path": "资治通鉴.json",
+      "sha256": "9a884c7576104b5a1b5212b544ac80c87cbac35b3bf0b84d085fc2f635840f03",
+      "title": "资治通鉴",
+      "originalAuthor": "司马光等",
+      "upstreamSha256": "032a7419c07f739abdfe64b3959660a1e67cee7e04ea36f3c748b7c6025bd3f0"
+    },
+    "shiji": {
+      "path": "史记.json",
+      "sha256": "87126b012a4e19144a1fbae5a70c8f74ae748ab9b6553c557e79a2680920c37e",
+      "title": "史记",
+      "originalAuthor": "司马迁",
+      "upstreamSha256": "842e1c79c3c04f323fe5b55cf50d51c14166a3dd9194ffb0d7f26db488014ca8"
+    },
+    "hanshu": {
+      "path": "汉书.json",
+      "sha256": "cb842b27e3bf23be8fbcc88b8c7a72544935d7e3fe7bc8385ea80b9a8740a882",
+      "title": "汉书",
+      "originalAuthor": "班固等",
+      "upstreamSha256": "012b0b128ab3133957d80a424ae51bc6f60f660c7bb1b6774764f667861c62f7"
+    }
+  },
+  "snapshotTransform": "Retain only name and articles; omit modern introductory description; UTF-8 compact JSON, deterministic gzip."
+}

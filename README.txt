@@ -1,9 +1,10 @@
-浏览器历法双向查询 0.4.0
+浏览器历法双向查询 0.5.0
 
 本版修正历史日期的计算依据。完整接口、迁移说明和数据许可见 README.md。
 
 历史模式（默认）
-  先加载 data/dila-history.js、data/research-history.js，再加载 lunisolar.js。
+  先加载 data/dila-history.js、data/research-history.js，
+  再加载可选的 data/era-supplement.js、data/history-notes.js，最后加载 lunisolar.js。
   const history = Lunisolar.create();
   history.solarToLunar({year:1662,month:2,day:18});
   history.lunarToSolar({eraId:660,eraYear:1,month:1,day:1});
@@ -49,3 +50,15 @@ npm test 验证现代回归及历史月段往返；npm run test:range 仅验证�
   includeReconstructions:false 可只使用原有 DILA 数据。
   研究源码及派生研究数据 GPL-3.0-only，DILA 独立数据仍为 CC BY-SA 3.0。
   来源、固定版本、许可与覆盖报告详见 README.md、vendor/ytliu 和 data/coverage.json。
+
+0.5.0 年号与每日史料备注
+  新增 47 组周、鲁、秦君主纪年，合计 975 项年号/纪年；补充部分年号异名检索。
+  新增《资治通鉴》10,065 条、《史记》50 条、《汉书》160 条古文摘录。
+  9,814 条有日期候选，461 条日期待核，不强行挂到某一天。
+  只记月：该历法月初一；只记年：该历法年首日（秦汉可能为十月）。
+  precision、placement、isDisplayAnchor 明确区分原文精度与归档位置。
+  history.notes(date, options) 查当天；history.notesRange(from,to,options) 返回逐日 notes。
+  history.searchNotes({search,bookId,precision,resolution,year,offset,limit}) 检索与分页。
+  两种模式的 matches[].notes 都按 JDN 关联史料；没有记录返回空数组，不代表无事。
+  原文出处、固定版本、段号、候选历法与提取局限见 README.md 及 vendor/chronicles。
+  npm run build:notes 可离线重建；demo.html 包含所有数据，下载后直接在浏览器打开。
