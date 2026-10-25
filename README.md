@@ -2,7 +2,7 @@
 
 浏览器端西历与中国历法双向查询，支持多候选、儒略历 / 格里高利历、指定地区改历断档。
 
-**0.3.0 修正了历史查询的计算依据。默认使用有来源的 DILA 历表，不再把 Intl 的现代回推结果当作历史日期。** 现代回推仍可显式选择，范围为公元前 2000 年至公元 3000 年。
+**0.4.0 扩充历史来源：DILA 历表 + Yuk Tung Liu 的 18 套研究历法。默认保留各来源候选，不再把 Intl 的现代回推结果当作历史日期。** 现代回推仍可显式选择，范围为公元前 2000 年至公元 3000 年。
 
 公元前 2000 年至公元 3000 年不存在一份可据此保证完整、唯一且符合实际颁历的历史资料。本项目不会用天文回推填补历史资料空白，也不会把未来日期称为实际颁历。
 
@@ -12,6 +12,7 @@
 
 ```html
 <script src="data/dila-history.js"></script>
+<script src="data/research-history.js"></script>
 <script src="lunisolar.js"></script>
 <script>
 const history = Lunisolar.create();
@@ -42,7 +43,7 @@ console.log(history.solarToLunar({ year: -1999, month: 1, day: 1 }));
 ```js
 {
   status: 'unique', // none / unique / ambiguous / undetermined
-  basis: 'historical-table',
+  basis: 'historical-sources', // 仅加载 DILA 时为 historical-table
   complete: true, // 本次来源查询没有发现未解决的缺口/冲突，不表示史学上的完备或绝对准确
   source: { /* 数据来源、版本标识、校验和、许可、已知局限 */ },
   issues: [],
@@ -68,11 +69,69 @@ console.log(history.solarToLunar({ year: -1999, month: 1, day: 1 }));
 - 第二个参数可以用 `eraId` 或 `dynastyId` 限定历史查询的政权/年号。
 - 历史特殊月保留来源编号 `-1`、`-2` 和原始 `monthName`；不强行改成现代的一至十二月。反查可以用 `monthName` 替代 `month`。
 - 年号在月中变更时，使用源记录的 `start_from` 计算日号，不把每条记录的第一天误当作初一。
-- 缺少历史数据脚本时会报错，不偷偷使用 Intl。
+- 缺少 DILA 数据脚本时会报错，不偷偷使用 Intl。补充研究脚本可以不加载；`metadata.reconstructionDataLoaded` 表示它是否可用。
+
+## 0.4.0 补充覆盖
+
+补充来源：[Yuk Tung Liu / ChineseCalendar](https://github.com/ytliu0/ChineseCalendar)，固定提交 `719e02ff011ab122aad5fb29084e3f6ee8b65390`。保留上游源码、研究说明、许可及 SHA-256 清单于 [`vendor/ytliu`](vendor/ytliu)，以本地脚本可复现地生成 [`data/research-history.js`](data/research-history.js)。这部分查询不依赖 Intl。
+
+新增 **68,546 条月段、18 套研究历法**：
+
+| 研究方案 | N_y 年标签范围（天文纪年） |
+| --- | --- |
+| 春秋历（鲁历重建） | -721—-480 |
+| 周历、殷历 | -721—-221 |
+| 夏历两种历元 | -721—-480 / -479—-221 |
+| 鲁历、黄帝历、颛顼历（古六历） | -479—-221 |
+| 秦及汉初颛顼历 | -220—-105 |
+| 历代主历表研究序列 | -104—2026 |
+| 蜀汉、孙吴 | 221—263 / 222—280 |
+| 后秦、北凉 | 384—417 / 412—439 |
+| 北魏—西魏—北周—隋、东魏—北齐 | 398—590 / 534—577 |
+| 辽—金—元、南明及明郑 | 947—1279 / 1645—1683 |
+
+研究序列的年份是上游历年的标识，不是精确政权存续区间。历年可能始于上一公历年或结束于下一公历年。补充数据截断于 **2026-10-25**，不会将此后的预测冒充历史记录。
+
+合并来源后，至少存在一个候选的日期增加 **225,586 天**，原 DILA 标准有效记录之间的 **7 段内部空档**全部有补充来源可查。来源并集从回推格里高利历 `-722-12-08` 连续至 `2026-10-25`；最早区间属于 N_-721（公元前 722 年）的研究历年。**并集无空档只表示每天有来源候选，不表示每天都已查实，也不表示各政权资料完备。** 计算明细见 [`data/coverage.json`](data/coverage.json)。
+
+### 研究历法查询
+
+```js
+const history = Lunisolar.create();
+history.calendars(); // 名称、范围、研究假设、说明链接
+
+// 春秋历 N_-721 的正月初一；来源给出的儒略历日期为前722年1月16日
+history.lunarToSolar(
+  { calendarId: 'ytliu/chunqiu', year: -721, month: 1, day: 1 },
+  { calendar: 'julian' }
+);
+
+// 同一西历日保留所有方案；可指定 calendarId 筛选
+history.solarToLunar(
+  { year: -721, month: 1, day: 16 },
+  { calendar: 'julian', calendarId: 'ytliu/chunqiu' }
+);
+
+// 239 年出现两个普通十二月：即使明确 isLeap:false，仍有两个日期
+history.lunarToSolar({
+  calendarId: 'ytliu/main', year: 239, month: 12, day: 1, isLeap: false
+});
+
+// 仅使用原 DILA 历表
+const dilaOnly = Lunisolar.create({ includeReconstructions: false });
+```
+
+研究候选同样保存在 `matches[].lunars`，字段为 `calendarId`、`calendarName`、`year`、`month`、`monthName`、`day`、`isLeap`、`sourceId` 和 `recordId`；`basis` 明确为 `historical-reconstruction`。可将该候选直接传回 `lunarToSolar`。上游历法数据无本项目的年号 ID，不编造年号映射。
+
+每条候选标明 `sourceId`，整体结果的 `sources` 提供来源清单。不同来源不被互相覆盖，也不自动判定哪一个更正确。旧 `source` 字段保留 DILA 信息以兼容 0.3.0；判断候选依据应读取 `sourceId`。
+
+古六历中的“黄帝历”“夏历”是研究方案名称，不能据此声称重建了黄帝或夏代的完整实用历。春秋和古六历采用上游的年终置闰方案，这是一项需要保留的假设。通用年终闰月用 `month:13, monthName:'閏月', isLeap:true` 编码，13 是该方案的序号，不表示现代“闰十三月”；颛顼历保留“後九月”。特定历法改革的 28 天月份和重复普通月均原样保留。
+
+更早的公元前 2000 年等日期仍返回 `undetermined`。需要现代规则推算时必须显式选择现代模式，不能把它作为史料补全。
 
 ## 来源、覆盖与质量
 
-来源：[DILA Time Authority Open Content](https://authority.dila.edu.tw/docs/open_content/download.php) 的 `authority_time_chinese.2012-02.zip`。原始压缩包、许可和结构说明保存在 [`vendor/dila`](vendor/dila)，转换脚本为 [`scripts/build-history.py`](scripts/build-history.py)。
+原有来源：[DILA Time Authority Open Content](https://authority.dila.edu.tw/docs/open_content/download.php) 的 `authority_time_chinese.2012-02.zip`。原始压缩包、许可和结构说明保存在 [`vendor/dila`](vendor/dila)，转换脚本为 [`scripts/build-history.py`](scripts/build-history.py)。
 
 导入 56,327 条月/拆分月记录，关联 928 个年号。原始记录边界为 JDN 1641025—2419450，对应回推格里高利历天文纪年 `-220-11-14` 至 `1912-02-17`。这只是来源记录的外边界，不代表每个朝代、每个日期都有可靠记录。不能将其覆盖扩展为公元前 2000 年的确定历史历法。
 
@@ -92,7 +151,9 @@ const history = Lunisolar.create({ mode: 'historical', includeProleptic: true })
 
 ### 数据许可
 
-DDBC / DILA（法鼓佛教学院 / 法鼓文理学院）提供原始数据。按下载包中 `README.txt` 和 `COPYING.txt` 声明，原始及本项目派生的历表数据以 **CC BY-SA 3.0 Unported** 分发。派生内容只做结构转换、排序和选取字段；原始记录区间不作猜测性修补。数据脚本和离线示例中的内嵌数据同样适用此许可。完整条款见 [`vendor/dila/COPYING.txt`](vendor/dila/COPYING.txt)。
+DDBC / DILA（法鼓佛教学院 / 法鼓文理学院）提供原始数据。按下载包中 `README.txt` 和 `COPYING.txt` 声明，原始及本项目派生的历表数据以 **CC BY-SA 3.0 Unported** 分发。派生内容只做结构转换、排序和选取字段；原始记录区间不作猜测性修补。DILA 数据脚本和离线示例中的内嵌 DILA 数据同样适用此许可。完整条款见 [`vendor/dila/COPYING.txt`](vendor/dila/COPYING.txt)。
+
+项目程序代码、Yuk Tung Liu 上游研究源码和派生研究历表按 **GPL-3.0-only** 分发，保留作者署名和对应源文件；见 [LICENSE](LICENSE) 与 [`vendor/ytliu/LICENSE`](vendor/ytliu/LICENSE)。DILA 数据作为独立资料保留其 CC BY-SA 3.0 许可，不被改成 GPL。离线示例内嵌数据分别遵循各自许可。
 
 ## 现代回推 / 预测（显式选择）
 
@@ -136,13 +197,16 @@ Lunisolar.resolveSolar(
 ## 构建与验证
 
 ```sh
-npm test                 # 现代回归 + 历史记录测试（Node.js 22+，完整 ICU）
+npm test                 # 现代回归 + DILA + 补充研究历表测试（Node.js 22+，完整 ICU）
 npm run test:range      # 较慢，仅验证现代回推模式 5001 个农历年的结构
 npm run build:history  # 从固定原始包重新生成历史数据，需要 Python 3
+npm run build:research # 从固定研究源码生成补充历表和覆盖报告
 npm run build:demo     # 重新生成单文件离线示例
 ```
 
 历史测试验证 103,995 个有效 standard 月段边界的双向查询，覆盖同日多朝代、同名年号、多闰月候选、特殊月名、月中改元、资料缺失、外推标记与源数据冲突。1662-02-18 是防止历史查询误走 Intl 的差异回归案例。
+
+补充研究历表还验证了 **137,092** 个新增月段边界的双向查询，以及春秋历锚点、239 年重复十二月、秦汉改历衔接、研究数据开关、资料截止日和原 7 段空档。
 
 这些检查验证转换实现及来源的一致性，不是对源历表历史正确性的独立证明。
 

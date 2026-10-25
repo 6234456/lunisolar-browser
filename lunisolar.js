@@ -171,20 +171,26 @@
       }
     });
   }
-  function createHistorical({includeProleptic = false} = {}) {
+  function createHistorical({includeProleptic = false, includeReconstructions = true} = {}) {
     if (typeof includeProleptic !== 'boolean') throw new TypeError('includeProleptic 必须为布尔值');
+    if (typeof includeReconstructions !== 'boolean') throw new TypeError('includeReconstructions 必须为布尔值');
     const data = root.LunisolarHistoricalData;
     if (!data || data.source?.id !== 'dila-time-chinese-2012-02')
       throw new Error('历史模式需要先加载 data/dila-history.js；现代回推请显式使用 mode:"modern"');
     // Copy the data so later edits to the public data object cannot alter queries.
     const source = JSON.parse(JSON.stringify(data.source));
     const eras = JSON.parse(JSON.stringify(data.eras));
-    const rows = data.months.map(r => r.slice());
+    const research=includeReconstructions?root.LunisolarResearchData:null;
+    const calendars=JSON.parse(JSON.stringify(research?.calendars||{}));
+    const sources=[source,...(research?[JSON.parse(JSON.stringify(research.source))]:[])];
+    const rows = [...data.months,...(research?.months||[])].map(r => r.slice()).sort((a,b)=>a[6]-b[6]||a[0]-b[0]);
     const byEra = new Map();
+    const byCalendarYear = new Map();
     const prefixEnd = [];
     rows.forEach((r,i) => {
-      if (!byEra.has(r[1])) byEra.set(r[1],[]);
-      byEra.get(r[1]).push(r);
+      const index=r[10]?byCalendarYear:byEra, key=r[10]?`${r[10]}:${r[2]}`:r[1];
+      if (!index.has(key)) index.set(key,[]);
+      index.get(key).push(r);
       prefixEnd[i] = Math.max(i ? prefixEnd[i-1] : -Infinity,r[7]);
     });
     function at(jdn) {
@@ -201,16 +207,20 @@
       return null;
     }
     function label(r,jdn) {
+      if(r[10])return {calendarId:r[10],calendarName:calendars[r[10]].name,year:r[2],
+        month:r[3],monthName:r[4],day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],
+        sourceId:research.source.id,basis:'historical-reconstruction'};
       const era=eras[r[1]];
       return {eraId:era.id,...(era.name?{eraName:era.name}:{}),eraYear:r[2],dynastyId:era.dynastyId,
         dynasty:era.dynasty,emperor:era.emperor,month:r[3],monthName:r[4],
-        day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],sourceStatus:r[9],
+        day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],sourceId:source.id,sourceStatus:r[9],
         basis:r[9]==='P'?'source-proleptic':'historical-table'};
     }
     function finish(matches,issues=[]) {
       matches.sort((a,b)=>a.jdn-b.jdn);
       return {...outcome(matches),status:issues.length?'undetermined':outcome(matches).status,
-        basis:'historical-table',source:JSON.parse(JSON.stringify(source)),
+        basis:research?'historical-sources':'historical-table',source:JSON.parse(JSON.stringify(source)),
+        sources:JSON.parse(JSON.stringify(sources)),
         complete:issues.length===0,issues};
     }
     function add(matches,jdn,r,options) {
@@ -219,16 +229,20 @@
       if(!match.lunars.some(l=>l.recordId===r[0])) match.lunars.push(label(r,jdn));
     }
     function filter(r,options) {
-      return (options.eraId===undefined || r[1]===options.eraId) &&
-        (options.dynastyId===undefined || eras[r[1]].dynastyId===options.dynastyId);
+      return (options.calendarId===undefined || r[10]===options.calendarId) &&
+        (options.eraId===undefined || !r[10]&&r[1]===options.eraId) &&
+        (options.dynastyId===undefined || !r[10]&&eras[r[1]].dynastyId===options.dynastyId);
     }
     function selectors(options) {
       for(const key of ['eraId','dynastyId']) if(options[key]!==undefined) integer(options[key],key,1,65535);
+      if(options.calendarId!==undefined&&typeof options.calendarId!=='string')throw new TypeError('calendarId 必须是字符串');
     }
     return Object.freeze({
-      metadata:Object.freeze({mode:'historical',engine:'DILA/month-table',
+      metadata:Object.freeze({mode:'historical',engine:research?'historical/month-tables':'DILA/month-table',
         firstJdn:rows[0][6],lastJdn:prefixEnd.at(-1),historicalAuthority:false,
-        includeProleptic,source:JSON.parse(JSON.stringify(source))}),
+        includeProleptic,includeReconstructions,reconstructionDataLoaded:!!research,
+        source:JSON.parse(JSON.stringify(source)),sources:JSON.parse(JSON.stringify(sources))}),
+      calendars() { return Object.values(calendars).map(c=>({...c})); },
       eras({search='',dynastyId}={}) {
         if(typeof search!=='string') throw new TypeError('search 必须是字符串');
         selectors({dynastyId});
@@ -254,6 +268,25 @@
       lunarToSolar(query,options={}) {
         if(!query||typeof query!=='object')throw new TypeError('查询必须是对象');
         prepare(options);selectors(options);
+        if(query.calendarId!==undefined) {
+          selectors({calendarId:query.calendarId});
+          integer(query.year,'year（研究历表 N_y 标签）',-9999,9999);
+          integer(query.day,'day',1,30);
+          if(query.eraId!==undefined||query.eraName!==undefined||query.eraYear!==undefined)throw new TypeError('研究历法 year 与年号纪年不能混用');
+          if(query.month!==undefined)integer(query.month,'month',1,13);
+          if(query.monthName!==undefined&&(typeof query.monthName!=='string'||!query.monthName))throw new TypeError('monthName 必须是非空字符串');
+          if(query.month===undefined&&query.monthName===undefined)throw new TypeError('需要 month 或 monthName');
+          if(query.isLeap!==undefined&&typeof query.isLeap!=='boolean')throw new TypeError('isLeap 必须是布尔值或省略');
+          const list=byCalendarYear.get(`${query.calendarId}:${query.year}`);
+          if(!list)return finish([],[{code:'NO_RECONSTRUCTION_RECORD',calendarId:query.calendarId,year:query.year}]);
+          const matches=[];
+          for(const r of list) {
+            if(!filter(r,options)||query.month!==undefined&&query.month!==r[3]||query.monthName!==undefined&&query.monthName!==r[4]||query.isLeap!==undefined&&query.isLeap!==!!r[5])continue;
+            const jdn=r[6]+query.day-r[8];
+            if(jdn>=r[6]&&jdn<=r[7])add(matches,jdn,r,options);
+          }
+          return finish(matches);
+        }
         if(query.eraId===undefined && query.eraName===undefined)
           return finish([],[{code:'ERA_REQUIRED',message:'历史反查需要 eraId 或 eraName，以及 eraYear；公历年份不能代替年号纪年'}]);
         if(query.eraId!==undefined)integer(query.eraId,'eraId',1,65535);

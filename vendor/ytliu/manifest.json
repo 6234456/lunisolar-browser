@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/ytliu0/ChineseCalendar",
+  "revision": "719e02ff011ab122aad5fb29084e3f6ee8b65390",
+  "author": "Yuk Tung Liu",
+  "license": "GPL-3.0-only",
+  "files": {
+    "LICENSE": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b",
+    "README.md": "6edd0319589cf8c8b1ae4e6fba3c48f37376822598df0b44c03431f76c7f4e94",
+    "ancientCalendars.js": "fd0a480a9ed5a875c46a41000c733157e1a7009256e6c07a0597bae525016c89",
+    "calendar.js": "a52de595b0160ca44782102b4658d10f9eeaa286e19b9342a8d93ef984d5f6f0",
+    "calendarData.js": "fdb8bc61e485022f20b258890e009347b7c187b7672a932a1d41a016e6b18dfc",
+    "chunqiu_simp.html": "2c0fc15c786f08ad2dd0f0fda4910bed70d05219ad7de447976d9a17d7705102",
+    "computation_simp.html": "d39993ed54790a1bf8adba76636687117657d52323ad48c2a73edee4f35da939",
+    "guliuli_simp.html": "9350c4a445e90075401064e0b29dd41896e10f53d758d997e207dfdc67a03e6d",
+    "split.js": "f026a1fb1bc9f55e66818b9374c2c20b853eb1d121f96fe8692ca6c1454e56f2",
+    "utilities.js": "0ac5c8d639596a6d72ecbf12240021a2993a994395c3d269541d34f997e5784f"
+  }
+}

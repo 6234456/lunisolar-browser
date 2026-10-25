@@ -1,0 +1,302 @@
+{
+  "meaning": "At least one source candidate exists; continuity is not historical certainty or complete polity coverage.",
+  "previous": {
+    "days": 778057,
+    "firstJdn": 1641025,
+    "lastJdn": 2419450,
+    "firstGregorian": {
+      "year": -220,
+      "month": 11,
+      "day": 14
+    },
+    "lastGregorian": {
+      "year": 1912,
+      "month": 2,
+      "day": 17
+    },
+    "gaps": [
+      [
+        1728376,
+        1728401
+      ],
+      [
+        1801743,
+        1801757
+      ],
+      [
+        1946946,
+        1946950
+      ],
+      [
+        2040148,
+        2040149
+      ],
+      [
+        2206152,
+        2206206
+      ],
+      [
+        2207817,
+        2207866
+      ],
+      [
+        2207920,
+        2208135
+      ]
+    ]
+  },
+  "expanded": {
+    "days": 1003643,
+    "firstJdn": 1457697,
+    "lastJdn": 2461339,
+    "firstGregorian": {
+      "year": -722,
+      "month": 12,
+      "day": 8
+    },
+    "lastGregorian": {
+      "year": 2026,
+      "month": 10,
+      "day": 25
+    },
+    "gaps": []
+  },
+  "addedCandidateDays": 225586,
+  "supplementaryMonthSegments": 68546,
+  "calendars": [
+    {
+      "id": "ytliu/chunqiu",
+      "name": "春秋历（鲁历重建）",
+      "firstYear": -721,
+      "lastYear": -480,
+      "notes": "根据张培瑜等《中国古代历法》第3.5节重建；采用年终置闰方案，闰月位置与部分日期存在不确定性。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/chunqiu.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1457728,
+      "lastJdn": 1546083,
+      "monthSegments": 2992
+    },
+    {
+      "id": "ytliu/zhou",
+      "name": "周历",
+      "firstYear": -721,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1457697,
+      "lastJdn": 1640669,
+      "monthSegments": 6196
+    },
+    {
+      "id": "ytliu/yin",
+      "name": "殷历",
+      "firstYear": -721,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1457727,
+      "lastJdn": 1640729,
+      "monthSegments": 6197
+    },
+    {
+      "id": "ytliu/xia-spring",
+      "name": "夏历（雨水合朔历元）",
+      "firstYear": -721,
+      "lastYear": -480,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1457757,
+      "lastJdn": 1546141,
+      "monthSegments": 2993
+    },
+    {
+      "id": "ytliu/xia-warring",
+      "name": "夏历（冬至合朔历元）",
+      "firstYear": -479,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1546141,
+      "lastJdn": 1640757,
+      "monthSegments": 3204
+    },
+    {
+      "id": "ytliu/lu",
+      "name": "鲁历（古六历）",
+      "firstYear": -479,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1546083,
+      "lastJdn": 1640670,
+      "monthSegments": 3203
+    },
+    {
+      "id": "ytliu/huangdi",
+      "name": "黄帝历（古六历）",
+      "firstYear": -479,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1546082,
+      "lastJdn": 1640669,
+      "monthSegments": 3203
+    },
+    {
+      "id": "ytliu/zhuanxu",
+      "name": "颛顼历（古六历）",
+      "firstYear": -479,
+      "lastYear": -221,
+      "notes": "古六历研究方案，采用年终置闰假设；名称不表示在同名上古朝代已经施行。春秋时期列出的古六历仅供比较。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/guliuli.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1546053,
+      "lastJdn": 1640640,
+      "monthSegments": 3203
+    },
+    {
+      "id": "ytliu/qinhan",
+      "name": "秦及汉初颛顼历重建",
+      "firstYear": -220,
+      "lastYear": -105,
+      "notes": "采用上游秦汉研究方案，不把研究年标签冒充帝王纪年。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/QinHanCalendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1640641,
+      "lastJdn": 1683017,
+      "monthSegments": 1435
+    },
+    {
+      "id": "ytliu/main",
+      "name": "历代主历表研究序列",
+      "firstYear": -104,
+      "lastYear": 2026,
+      "notes": "采用上游主历表，历史时期按上游选定政权序列；包含历法改革和史料校订。近现代数据为该研究项目编算，非全部逐条核验的原始颁历。截断于2026-10-25。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/computation.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1683018,
+      "lastJdn": 2461339,
+      "monthSegments": 26357
+    },
+    {
+      "id": "ytliu/Shu",
+      "name": "蜀汉",
+      "firstYear": 221,
+      "lastYear": 263,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/ThreeKingdoms_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1801819,
+      "lastJdn": 1817528,
+      "monthSegments": 532
+    },
+    {
+      "id": "ytliu/Wu",
+      "name": "孙吴",
+      "firstYear": 222,
+      "lastYear": 280,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/ThreeKingdoms_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1802173,
+      "lastJdn": 1823729,
+      "monthSegments": 730
+    },
+    {
+      "id": "ytliu/LaterQin",
+      "name": "后秦",
+      "firstYear": 384,
+      "lastYear": 417,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1861352,
+      "lastJdn": 1873783,
+      "monthSegments": 421
+    },
+    {
+      "id": "ytliu/NorthernLiang",
+      "name": "北凉",
+      "firstYear": 412,
+      "lastYear": 439,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1871570,
+      "lastJdn": 1881816,
+      "monthSegments": 347
+    },
+    {
+      "id": "ytliu/WeiZhouSui",
+      "name": "北魏—西魏—北周—隋研究序列",
+      "firstYear": 398,
+      "lastYear": 590,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1866461,
+      "lastJdn": 1936950,
+      "monthSegments": 2387
+    },
+    {
+      "id": "ytliu/WeiQi",
+      "name": "东魏—北齐研究序列",
+      "firstYear": 534,
+      "lastYear": 577,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/NorthSouth_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 1916131,
+      "lastJdn": 1932195,
+      "monthSegments": 544
+    },
+    {
+      "id": "ytliu/LiaoJinYuan",
+      "name": "辽—金—元研究序列",
+      "firstYear": 947,
+      "lastYear": 1279,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/LiaoJinYuan_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 2066974,
+      "lastJdn": 2188609,
+      "monthSegments": 4119
+    },
+    {
+      "id": "ytliu/SouthernMing",
+      "name": "南明及明郑",
+      "firstYear": 1645,
+      "lastYear": 1683,
+      "notes": "上游按该政权历法重建的完整年历；起讫年份不代表政权成立或消亡的精确日期。",
+      "url": "https://ytliu0.github.io/ChineseCalendar/QingSouthernMingZheng_calendars.html",
+      "basis": "historical-reconstruction",
+      "yearDefinition": "研究历表的 N_y 年标签（天文纪年），不等于年号年份，也不保证年首位于同一公历年",
+      "firstJdn": 2321912,
+      "lastJdn": 2336173,
+      "monthSegments": 483
+    }
+  ]
+}
