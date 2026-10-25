@@ -31,6 +31,7 @@
 <label>史书 <select id="noteBook"><option value="">全部</option><option value="shiji">史记</option><option value="hanshu">汉书</option><option value="tongjian">资治通鉴</option></select></label>
 <label>日期精度 <select id="notePrecision"><option value="">全部</option><option value="day">记日</option><option value="month">仅记月</option><option value="year">仅记年</option></select></label>
 <label>日期状态 <select id="noteResolution"><option value="">全部</option><option value="unique">一个候选日</option><option value="ambiguous">多个候选日</option><option value="unresolved">待核日期</option></select></label>
+<label>专题 <select id="noteTopic"><option value="">全部</option><option value="era-change">含改元记载</option><option value="corrected">使用校订年份</option></select></label>
 <button id="findNotes">检索</button> <button id="moreNotes" hidden>下一页</button><div id="noteSearchResults" aria-live="polite"></div></section>
 <small>补充来源：Yuk Tung Liu 的 ChineseCalendar 历史重建研究（GPL-3.0），18 套历法方案。重建候选不等于已证实的实际颁历；古六历的年终置闰是一种研究假设。</small>
 <script>{{HISTORY_DATA}}</script>
@@ -54,6 +55,8 @@ function renderNote(n,parent){
  const head=document.createElement('strong');head.textContent=`《${n.book}》卷 ${n.volume} · ${precisionText[n.precision]}`;card.append(head);
  const quote=document.createElement('p');quote.textContent=n.text;card.append(quote);
  const info=document.createElement('small');info.textContent=`来源段号 ${n.paragraph}；${n.resolution==='unresolved'?'日期待核，未归入某一天':n.resolution==='ambiguous'?'历法换算有多个候选日期':'按研究历表换算'}。规则提取，尚非逐条校勘。`;card.append(info);
+ for(const c of n.corrections||[]){const detail=document.createElement('small');detail.textContent=`编年校订：${c.original} → 归档年份 ${c.correctedYear}。`;const proof=document.createElement('a');proof.href=c.evidence.url;proof.target='_blank';proof.rel='noopener noreferrer';proof.textContent='校订依据（固定版本）';detail.append(proof);card.append(detail);}
+ if(n.recordedDate.monthName===null&&n.recordedDate.isLeap){const info=document.createElement('small');info.textContent='原文仅写“闰月”，未指定月号；候选来自该历年的闰月，未沿用普通月。';card.append(info);}
  const link=document.createElement('a');link.href=n.sourceUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看固定版本原文';card.append(link);
  for(const jdn of new Set(n.dateCandidates.map(c=>c.jdn))){const d=Lunisolar.fromJdn(jdn),button=document.createElement('button');button.textContent=`查看 ${d.year}-${d.month}-${d.day}（天文纪年公历）`;button.onclick=()=>showDate(jdn);card.append(button);}
  parent.append(card);
@@ -117,7 +120,7 @@ $('monthNotes').onclick=()=>{
  const last=Lunisolar.fromJdn(Lunisolar.toJdn(next)-1);const result=engines.historical.notesRange({...d,day:1},last);
  $('dailyNotes').replaceChildren();for(const day of result.days){const detail=document.createElement('details'),s=document.createElement('summary');const date=Lunisolar.fromJdn(day.jdn);s.textContent=`${date.year}-${date.month}-${date.day} · ${day.notes.length} 条已收录备注`;detail.append(s);for(const n of day.notes)renderNote(n,detail);$('dailyNotes').append(detail);}
 };
-function searchNotes(){const result=engines.historical.searchNotes({search:$('noteSearch').value.trim(),bookId:$('noteBook').value||undefined,precision:$('notePrecision').value||undefined,resolution:$('noteResolution').value||undefined,offset:noteOffset,limit:20});$('noteSearchResults').replaceChildren();const count=document.createElement('p');count.textContent=`共 ${result.total} 条；本页 ${result.notes.length} 条`;$('noteSearchResults').append(count);for(const n of result.notes)renderNote(n,$('noteSearchResults'));$('moreNotes').hidden=noteOffset+20>=result.total;}
+function searchNotes(){const topic=$('noteTopic').value;const result=engines.historical.searchNotes({search:$('noteSearch').value.trim(),bookId:$('noteBook').value||undefined,precision:$('notePrecision').value||undefined,resolution:$('noteResolution').value||undefined,corrected:topic==='corrected'?true:undefined,tag:topic==='era-change'?'era-change':undefined,offset:noteOffset,limit:20});$('noteSearchResults').replaceChildren();const count=document.createElement('p');count.textContent=`共 ${result.total} 条；本页 ${result.notes.length} 条`;$('noteSearchResults').append(count);for(const n of result.notes)renderNote(n,$('noteSearchResults'));$('moreNotes').hidden=noteOffset+20>=result.total;}
 $('findNotes').onclick=()=>{noteOffset=0;searchNotes();};$('moreNotes').onclick=()=>{noteOffset+=20;searchNotes();};
 run();
 </script></html>

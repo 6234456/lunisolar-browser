@@ -1,4 +1,4 @@
-浏览器历法双向查询 0.5.0
+浏览器历法双向查询 0.6.0
 
 本版修正历史日期的计算依据。完整接口、迁移说明和数据许可见 README.md。
 
@@ -51,14 +51,19 @@ npm test 验证现代回归及历史月段往返；npm run test:range 仅验证�
   研究源码及派生研究数据 GPL-3.0-only，DILA 独立数据仍为 CC BY-SA 3.0。
   来源、固定版本、许可与覆盖报告详见 README.md、vendor/ytliu 和 data/coverage.json。
 
-0.5.0 年号与每日史料备注
-  新增 47 组周、鲁、秦君主纪年，合计 975 项年号/纪年；补充部分年号异名检索。
-  新增《资治通鉴》10,065 条、《史记》50 条、《汉书》160 条古文摘录。
-  9,814 条有日期候选，461 条日期待核，不强行挂到某一天。
+0.6.0 年号与每日史料备注
+  新增 47 组周、鲁、秦君主纪年，合计 975 项年号/纪年；共 15 组有出处的年号异名规则。
+  收录《资治通鉴》12,653 条、《史记》94 条、《汉书》682 条古文摘录。
+  共 13,429 条，比上一版新增 3,154 条；原摘录 ID 全部保留。
+  12,809 条有日期候选，620 条日期待核，不强行挂到某一天。
   只记月：该历法月初一；只记年：该历法年首日（秦汉可能为十月）。
   precision、placement、isDisplayAnchor 明确区分原文精度与归档位置。
   history.notes(date, options) 查当天；history.notesRange(from,to,options) 返回逐日 notes。
-  history.searchNotes({search,bookId,precision,resolution,year,offset,limit}) 检索与分页。
+  history.searchNotes({search,bookId,precision,resolution,year,corrected,tag,offset,limit}) 检索与分页。
   两种模式的 matches[].notes 都按 JDN 关联史料；没有记录返回空数组，不代表无事。
   原文出处、固定版本、段号、候选历法与提取局限见 README.md 及 vendor/chronicles。
   npm run build:notes 可离线重建；demo.html 包含所有数据，下载后直接在浏览器打开。
+  本版修复未标月号的闰月归档，原待核 36 条获得候选，原有候选 8 条退回待核。
+  两处编年年份对照固定版本校订，原文和校订证据均保留；一个干支冲突标题仍隔离。
+  corrected:true 检索采用校订年份的备注；tag:'era-change' 检索含改元等记载。
+  改元标签仅表示提及，不自动推定年号生效日；逐条变化见 data/chronicles/progress-report.json。

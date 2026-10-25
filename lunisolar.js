@@ -117,15 +117,18 @@
         const days=Array.from({length:end-start+1},(_,i)=>attach({jdn:start+i,dayIndex:start+i-EPOCH_JDN,solar:solarAliases(start+i,options)}));
         return {days,notesCoverage:'partial',notesDataLoaded:!!data};
       },
-      searchNotes({search='',bookId,precision,resolution,year,offset=0,limit=50}={}) {
+      searchNotes({search='',bookId,precision,resolution,year,corrected,tag,offset=0,limit=50}={}) {
         if(typeof search!=='string')throw new TypeError('search 必须是字符串');
         if(bookId!==undefined&&!['tongjian','shiji','hanshu'].includes(bookId))throw new TypeError('未知史书 bookId');
         if(precision!==undefined&&!['day','month','year'].includes(precision))throw new TypeError('未知日期精度');
         if(resolution!==undefined&&!['unique','ambiguous','unresolved'].includes(resolution))throw new TypeError('未知日期解析状态');
         if(year!==undefined)integer(year,'year',-9999,9999);
+        if(corrected!==undefined&&typeof corrected!=='boolean')throw new TypeError('corrected 必须是布尔值');
+        if(tag!==undefined&&tag!=='era-change')throw new TypeError('未知备注标签');
         integer(offset,'offset',0,Number.MAX_SAFE_INTEGER);integer(limit,'limit',1,200);
         const found=notes.filter(n=>(!bookId||n.bookId===bookId)&&(!precision||n.precision===precision)&&
           (!resolution||n.resolution===resolution)&&(year===undefined||n.recordedDate.year===year)&&
+          (corrected===undefined||!!n.corrections?.length===corrected)&&(!tag||n.tags?.includes(tag))&&
           (!search||[n.text,n.sourceRegnalLabel||'',n.sourceArticleTitle||'',n.book].some(t=>t.includes(search))));
         return {total:found.length,offset,limit,notes:copy(found.slice(offset,offset+limit)),notesCoverage:'partial',notesDataLoaded:!!data};
       },

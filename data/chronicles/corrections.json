@@ -1,0 +1,30 @@
+[
+  {
+    "id": "tongjian-111-year-399",
+    "bookId": "tongjian",
+    "volume": 111,
+    "paragraph": 1,
+    "original": "安皇帝丙隆安三年（己亥，公元三三九年）",
+    "correctedYear": 399,
+    "reason": "固定版本对照文本记为三九九年，与隆安三年、己亥及相邻编年一致；仅修正机器归档年份，原转录文本保留。",
+    "evidence": {
+      "url": "https://zh.wikisource.org/w/index.php?oldid=1753376&title=資治通鑑/卷111",
+      "quote": "安皇帝丙隆安三年（己亥，公元三九九年）",
+      "accessed": "2026-10-25"
+    }
+  },
+  {
+    "id": "tongjian-188-year-620",
+    "bookId": "tongjian",
+    "volume": 188,
+    "paragraph": 4,
+    "original": "◎　武德三年庚辰，公元九二零年",
+    "correctedYear": 620,
+    "reason": "固定版本对照文本记为六二零年，与武德三年及相邻编年一致；仅修正机器归档年份，原转录文本保留。",
+    "evidence": {
+      "url": "https://zh.wikisource.org/w/index.php?oldid=1567784&title=資治通鑑/卷188",
+      "quote": "高祖神堯大聖光孝皇帝中之上武德三年（庚辰，公元六二零年）",
+      "accessed": "2026-10-25"
+    }
+  }
+]

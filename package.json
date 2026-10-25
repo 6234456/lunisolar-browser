@@ -1,6 +1,6 @@
 {
   "name": "lunisolar-browser",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": true,
   "description": "Browser Chinese lunisolar calendar conversion with ambiguity-aware results and Julian/Gregorian civil dates",
   "scripts": {
@@ -9,7 +9,7 @@
     "build:demo": "node scripts/build-demo.cjs",
     "build:history": "python3 scripts/build-history.py",
     "build:research": "node scripts/build-research.cjs && node scripts/report-coverage.cjs",
-    "build:notes": "node scripts/build-eras.cjs && node scripts/build-notes.cjs"
+    "build:notes": "node scripts/build-eras.cjs && node scripts/build-notes.cjs && node scripts/report-notes-progress.cjs"
   },
   "engines": {
     "node": ">=22"

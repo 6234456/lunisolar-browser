@@ -48,9 +48,15 @@ const aliasPatches=[
  {dynasty:'西漢',name:'初始',aliases:['始初']},{dynasty:'新',name:'始建國',aliases:['建國']},
  {dynasty:'東漢',name:'建武中元',aliases:['中元']},{dynasty:'東漢',name:'永憙',aliases:['永嘉','元嘉','永熹']},
  {dynasty:'東晉',name:'太興',aliases:['大興']},{dynasty:'西晉',name:'太安',aliases:['大安']},
- {dynasty:'南明',name:'弘光',aliases:['宏光']}
+ {dynasty:'南明',name:'弘光',aliases:['宏光']},
+ {dynasty:'新',name:'天鳳',aliases:['始建國天鳳上戊','始建國天鳳']},
+ {dynasty:'新',name:'地皇',aliases:['始建國地皇上戊','始建國地皇']},
+ {dynasty:'遼',name:'重熙',aliases:['重和','崇熙']},
+ {dynasty:'遼',name:'大康',aliases:['太康']},
+ {dynasty:'遼',name:'壽昌',aliases:['壽隆','盛昌']},
+ {dynasty:'遼',name:'乾統',aliases:['乾通']}
 ].map(p=>({...p,sourceUrl:'https://ytliu0.github.io/ChineseCalendar/era_names.html'}));
-const data={source:{id:'ytliu-regnal-supplement-0.5.0',title:'周、鲁、秦君主纪年补充',revision:manifest.revision,
+const data={source:{id:'ytliu-regnal-supplement-0.6.0',title:'周、鲁、秦君主纪年补充',revision:manifest.revision,
  url:manifest.repository,license:'GPL-3.0-only',sha256:manifest.files['eras.js'],
  limitations:['君主纪年不是汉武帝以后意义上的年号。','依上游研究序列生成整年候选；不声称已核定即位、退位的日界。']},eras,months,aliasPatches};
 fs.writeFileSync(path.join(root,'data/era-supplement.js'),'/* GPL-3.0-only; Yuk Tung Liu chronology adaptation. */\nglobalThis.LunisolarEraData = '+JSON.stringify(data).replace(/<\//g,'<\\/')+';\n');
