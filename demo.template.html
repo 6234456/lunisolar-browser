@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>历史历表与现代农历查询</title>
+<style>body{font:16px/1.7 system-ui;max-width:950px;margin:40px auto;padding:0 20px;color:#172b3a;background:#f6f8fa}h1{font-size:26px}fieldset{border:1px solid #ccd5dd;border-radius:10px;padding:20px;background:white}label{display:inline-block;margin:8px}input{width:85px}input,select,button{font:inherit;padding:6px}select{max-width:100%}button{cursor:pointer}pre{background:#142535;color:#edf7ff;overflow:auto;padding:20px;border-radius:10px;white-space:pre-wrap}small{display:block;color:#526674}</style>
+<h1>历史历表与现代农历查询</h1>
+<p>历史模式查有来源的历表，保留同一天的多个朝代纪年；资料缺失时返回“无法确定”。现代模式按现代规则回推或预测。</p>
+<fieldset><legend>日期查询</legend>
+<label>依据 <select id="mode"><option value="historical">历史历表（DILA）</option><option value="modern">现代规则回推 / 预测（Intl）</option></select></label>
+<label>方向 <select id="direction"><option value="solar">西历 → 农历</option><option value="lunar">农历 → 西历</option><option value="civil">仅西历日期解析</option></select></label>
+<div id="yearFields"><label>纪年 <select id="era"><option value="ce">公元</option><option value="bce">公元前</option><option value="astronomical">天文纪年</option></select></label>
+<label>年 <input id="year" type="number" value="1662" required></label></div>
+<div id="historyFields" hidden><label>历史年号 <select id="eraId"></select></label><label>年号第几年 <input id="eraYear" type="number" value="1" min="1"></label></div>
+<label>月 <input id="month" type="number" value="2" required></label>
+<label>日 <input id="day" type="number" value="18" min="1" max="31" required></label>
+<label>闰月 <select id="leap"><option value="">未指定（全部候选）</option><option value="false">普通月</option><option value="true">闰月</option></select></label>
+<label>西历 <select id="calendar"><option value="gregorian">回推格里高利历</option><option value="julian">回推儒略历</option><option value="auto">两种历法</option><option value="historical">1582-10-15 改历的地区</option></select></label>
+<button id="run" type="button">查询</button>
+</fieldset>
+<p><button id="historyExample">康熙元年正月初一</button> <button id="concurrentExample">清与南明并行纪年</button> <button id="bceExample">公元前 2000 年（查史料）</button> <button id="futureExample">公元 3000 年（现代预测）</button> <button id="leapExample">2023 二月初一（现代）</button> <button id="gapExample">西历改历缺日</button></p>
+<small>历史资料：DDBC / DILA 中国时间规范资料库 2012-02 版，CC BY-SA 3.0。默认排除来源标记为 P 的外推记录；年号起讫标记尚不完整，结果是有来源的重建记录，不是历史绝对准确性的保证。两条日号越界的源记录被隔离并报告冲突。</small>
+<small>历史输出使用年号纪年，支持按原始记录反查。现代模式支持公元前 2000 年至公元 3000 年，使用天文纪年：公元前 2000 年 = -1999；该模式不表示当时实际颁历。</small>
+<pre id="result" role="status" aria-live="polite"></pre>
+<script>{{HISTORY_DATA}}</script>
+<script>{{LIBRARY}}</script>
+<script>
+const $=id=>document.getElementById(id);
+const engines={historical:Lunisolar.create()};
+for(const e of engines.historical.eras()) { const o=document.createElement('option');o.value=e.id;o.textContent=[e.dynasty,e.emperor,e.name||'（来源未记年号名）'].join(' · ');$('eraId').append(o); }
+$('eraId').value='660';
+function fields(){const historical=$('mode').value==='historical'&&$('direction').value==='lunar';$('historyFields').hidden=!historical;$('yearFields').hidden=historical;}
+$('mode').onchange=fields;$('direction').onchange=fields;
+function run(){
+ try {
+  fields();
+  const mode=$('mode').value,direction=$('direction').value;
+  const options={calendar:$('calendar').value};
+  if(options.calendar==='historical') options.firstGregorian={year:1582,month:10,day:15};
+  for(const id of ['month','day'])if(!$(id).value.trim())throw new Error('请填写月日');
+  const d={month:Number($('month').value),day:Number($('day').value)};
+  if(mode==='historical'&&direction==='lunar') {
+   if(!$('eraYear').value.trim())throw new Error('请填写年号第几年');
+   d.eraId=Number($('eraId').value);d.eraYear=Number($('eraYear').value);
+  } else {
+   if(!$('year').value.trim())throw new Error('请填写年份');
+   d.year=Number($('year').value);
+   if($('era').value!=='astronomical') {
+    if(!Number.isSafeInteger(d.year)||d.year<1)throw new Error('公元/公元前年份必须是正整数，没有公元 0 年');
+    if($('era').value==='bce')d.year=1-d.year;
+   }
+  }
+  let result;
+  if(direction==='civil')result=Lunisolar.resolveSolar(d,options);
+  else {
+   if(!engines[mode])engines[mode]=Lunisolar.create({mode});
+   if(direction==='lunar'){
+    if($('leap').value!=='')d.isLeap=$('leap').value==='true';
+    result=engines[mode].lunarToSolar(d,options);
+   }else result=engines[mode].solarToLunar(d,options);
+  }
+  const title={none:'无匹配日期',unique:'唯一实际日期（可能有多个历史纪年）',ambiguous:'多个实际日期',undetermined:'无法确定：史料缺失或源数据冲突'}[result.status];
+  $('result').textContent=title+'\n'+JSON.stringify(result,null,2);
+ }catch(e){$('result').textContent='查询错误：'+e.message;}
+}
+function example(mode,direction,year,month,day,era='ce'){$('mode').value=mode;$('direction').value=direction;$('year').value=year;$('month').value=month;$('day').value=day;$('era').value=era;$('calendar').value='gregorian';$('leap').value='';run();}
+$('run').onclick=run;
+$('historyExample').onclick=()=>{$('eraId').value='660';$('eraYear').value=1;example('historical','lunar',1662,1,1);};
+$('concurrentExample').onclick=()=>example('historical','solar',1645,1,28);
+$('bceExample').onclick=()=>example('historical','solar',2000,1,1,'bce');
+$('futureExample').onclick=()=>example('modern','solar',3000,12,31);
+$('leapExample').onclick=()=>example('modern','lunar',2023,2,1);
+$('gapExample').onclick=()=>{example('historical','civil',1582,10,10);$('calendar').value='historical';run();};
+run();
+</script></html>

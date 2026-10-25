@@ -89,7 +89,7 @@
     return calendars.map(c => ({calendar:c, ...fromJdn(jdn,c)}));
   }
 
-  function create({minYear = -2000, maxYear = 3000} = {}) {
+  function createModern({minYear = -2000, maxYear = 3000} = {}) {
     // These are complete lunar relatedYear ranges, not partial Gregorian years.
     // Gregorian BCE 2000 = astronomical -1999. Its January dates may belong
     // to lunar year -2000, so include that entire preceding year for round trips.
@@ -143,7 +143,7 @@
       return records;
     }
     return Object.freeze({
-      metadata:Object.freeze({engine:'Intl/chinese', minYear, maxYear,
+      metadata:Object.freeze({mode:'modern', basis:'modern-projection', engine:'Intl/chinese', minYear, maxYear,
         timeZone:'UTC+08:00', historicalAuthority:false, epoch:'Gregorian 0001-01-01 = dayIndex 0'}),
       solarToLunar(date, options = {}) {
         const result = resolveSolar(date, options);
@@ -152,7 +152,7 @@
           checkYear(lunar.year); // Never return a partial candidate list on range errors.
           match.lunar = lunar;
         }
-        return result;
+        return {...result, basis:'modern-projection', source:'Intl/chinese'};
       },
       lunarToSolar(query, options = {}) {
         if (!query || typeof query !== 'object') throw new TypeError('查询必须是对象');
@@ -167,9 +167,125 @@
             (query.isLeap === undefined || r.lunar.isLeap === query.isLeap))
           .map(r => ({jdn:r.jdn, dayIndex:r.jdn - EPOCH_JDN,
             lunar:{...r.lunar}, solar:solarAliases(r.jdn, options)}));
-        return outcome(matches);
+        return {...outcome(matches), basis:'modern-projection', source:'Intl/chinese'};
       }
     });
+  }
+  function createHistorical({includeProleptic = false} = {}) {
+    if (typeof includeProleptic !== 'boolean') throw new TypeError('includeProleptic 必须为布尔值');
+    const data = root.LunisolarHistoricalData;
+    if (!data || data.source?.id !== 'dila-time-chinese-2012-02')
+      throw new Error('历史模式需要先加载 data/dila-history.js；现代回推请显式使用 mode:"modern"');
+    // Copy the data so later edits to the public data object cannot alter queries.
+    const source = JSON.parse(JSON.stringify(data.source));
+    const eras = JSON.parse(JSON.stringify(data.eras));
+    const rows = data.months.map(r => r.slice());
+    const byEra = new Map();
+    const prefixEnd = [];
+    rows.forEach((r,i) => {
+      if (!byEra.has(r[1])) byEra.set(r[1],[]);
+      byEra.get(r[1]).push(r);
+      prefixEnd[i] = Math.max(i ? prefixEnd[i-1] : -Infinity,r[7]);
+    });
+    function at(jdn) {
+      let lo=0, hi=rows.length;
+      while (lo<hi) { const mid=(lo+hi)>>>1; if(rows[mid][6]<=jdn) lo=mid+1; else hi=mid; }
+      const found=[];
+      for(let i=lo-1;i>=0 && prefixEnd[i]>=jdn;i--) if(rows[i][7]>=jdn) found.push(rows[i]);
+      return found.sort((a,b)=>a[0]-b[0]);
+    }
+    function issue(r) {
+      // Do not repair inconsistent source intervals by guessing a new-moon day.
+      if (r[8]<1 || r[7]-r[6]+r[8]>30)
+        return {code:'SOURCE_DATA_CONFLICT',recordId:r[0],eraId:r[1]};
+      return null;
+    }
+    function label(r,jdn) {
+      const era=eras[r[1]];
+      return {eraId:era.id,...(era.name?{eraName:era.name}:{}),eraYear:r[2],dynastyId:era.dynastyId,
+        dynasty:era.dynasty,emperor:era.emperor,month:r[3],monthName:r[4],
+        day:jdn-r[6]+r[8],isLeap:!!r[5],recordId:r[0],sourceStatus:r[9],
+        basis:r[9]==='P'?'source-proleptic':'historical-table'};
+    }
+    function finish(matches,issues=[]) {
+      matches.sort((a,b)=>a.jdn-b.jdn);
+      return {...outcome(matches),status:issues.length?'undetermined':outcome(matches).status,
+        basis:'historical-table',source:JSON.parse(JSON.stringify(source)),
+        complete:issues.length===0,issues};
+    }
+    function add(matches,jdn,r,options) {
+      let match=matches.find(m=>m.jdn===jdn);
+      if(!match) matches.push(match={jdn,dayIndex:jdn-EPOCH_JDN,solar:solarAliases(jdn,options),lunars:[]});
+      if(!match.lunars.some(l=>l.recordId===r[0])) match.lunars.push(label(r,jdn));
+    }
+    function filter(r,options) {
+      return (options.eraId===undefined || r[1]===options.eraId) &&
+        (options.dynastyId===undefined || eras[r[1]].dynastyId===options.dynastyId);
+    }
+    function selectors(options) {
+      for(const key of ['eraId','dynastyId']) if(options[key]!==undefined) integer(options[key],key,1,65535);
+    }
+    return Object.freeze({
+      metadata:Object.freeze({mode:'historical',engine:'DILA/month-table',
+        firstJdn:rows[0][6],lastJdn:prefixEnd.at(-1),historicalAuthority:false,
+        includeProleptic,source:JSON.parse(JSON.stringify(source))}),
+      eras({search='',dynastyId}={}) {
+        if(typeof search!=='string') throw new TypeError('search 必须是字符串');
+        selectors({dynastyId});
+        return Object.values(eras).filter(e=>(dynastyId===undefined||e.dynastyId===dynastyId) &&
+          [e.name,e.dynasty,e.emperor].some(v=>v.includes(search))).map(e=>({...e}));
+      },
+      solarToLunar(date,options={}) {
+        selectors(options);
+        const candidates=resolveSolar(date,options), matches=[], issues=[];
+        for(const c of candidates.matches) {
+          const found=at(c.jdn).filter(r=>filter(r,options));
+          let accepted=0;
+          for(const r of found) {
+            if(r[9]==='P'&&!includeProleptic)continue;
+            const error=issue(r);
+            if(error){issues.push({...error,jdn:c.jdn});continue;}
+            add(matches,c.jdn,r,options);accepted++;
+          }
+          if(!accepted)issues.push({code:'NO_HISTORICAL_RECORD',jdn:c.jdn});
+        }
+        return finish(matches,issues);
+      },
+      lunarToSolar(query,options={}) {
+        if(!query||typeof query!=='object')throw new TypeError('查询必须是对象');
+        prepare(options);selectors(options);
+        if(query.eraId===undefined && query.eraName===undefined)
+          return finish([],[{code:'ERA_REQUIRED',message:'历史反查需要 eraId 或 eraName，以及 eraYear；公历年份不能代替年号纪年'}]);
+        if(query.eraId!==undefined)integer(query.eraId,'eraId',1,65535);
+        if(query.eraName!==undefined && (typeof query.eraName!=='string'||!query.eraName))throw new TypeError('eraName 必须是非空字符串');
+        integer(query.eraYear,'eraYear',1,65535);integer(query.day,'day',1,30);
+        if(query.month!==undefined && ![-2,-1,1,2,3,4,5,6,7,8,9,10,11,12].includes(query.month))throw new RangeError('未知的历史月编号');
+        if(query.monthName!==undefined && (typeof query.monthName!=='string'||!query.monthName))throw new TypeError('monthName 必须是非空字符串');
+        if(query.month===undefined&&query.monthName===undefined)throw new TypeError('需要 month 或 monthName');
+        if(query.isLeap!==undefined&&typeof query.isLeap!=='boolean')throw new TypeError('isLeap 必须是布尔值或省略');
+        const selected=Object.values(eras).filter(e=>(query.eraId===undefined||e.id===query.eraId)&&
+          (query.eraName===undefined||e.name===query.eraName));
+        const yearRows=selected.flatMap(e=>byEra.get(e.id)||[]).filter(r=>r[2]===query.eraYear&&filter(r,options));
+        if(!yearRows.length)return finish([],[{code:'NO_HISTORICAL_RECORD'}]);
+        const matches=[],issues=[];
+        for(const r of yearRows) {
+          if(query.month!==undefined&&r[3]!==query.month || query.monthName!==undefined&&r[4]!==query.monthName ||
+             query.isLeap!==undefined&&!!r[5]!==query.isLeap)continue;
+          if(r[9]==='P'&&!includeProleptic)continue;
+          const error=issue(r);if(error){issues.push(error);continue;}
+          const jdn=r[6]+query.day-r[8];
+          if(jdn<r[6]||jdn>r[7])continue;
+          add(matches,jdn,r,options);
+        }
+        return finish(matches,issues);
+      }
+    });
+  }
+  function create(options={}) {
+    const mode=options.mode??'historical';
+    if(mode==='modern')return createModern(options);
+    if(mode==='historical')return createHistorical(options);
+    throw new TypeError('mode 必须是 historical 或 modern');
   }
   root.Lunisolar = Object.freeze({create, toJdn, fromJdn, resolveSolar, EPOCH_JDN});
 })(globalThis);

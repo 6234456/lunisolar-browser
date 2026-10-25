@@ -1,6 +1,7 @@
 const assert = require('node:assert/strict');
 require('./lunisolar.js');
-const {create,toJdn,fromJdn,resolveSolar,EPOCH_JDN} = Lunisolar;
+const {toJdn,fromJdn,resolveSolar,EPOCH_JDN} = Lunisolar;
+const create = options => Lunisolar.create({mode:'modern',...options});
 const c = create();
 assert.equal(toJdn({year:1,month:1,day:1}), EPOCH_JDN);
 assert.equal(toJdn({year:2000,month:1,day:1}),2451545);

@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 require('./lunisolar.js');
-const cal = Lunisolar.create();
+const cal = Lunisolar.create({mode:'modern'});
 for (let year = -2000; year <= 3000; year++) {
   // Each reverse query builds and validates the complete lunar year, including
   // the extra boundary year needed for Gregorian BCE 2000 January dates.
